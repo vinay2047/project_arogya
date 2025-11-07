@@ -41,17 +41,19 @@ const PaymentForm = ({
   const elements = useElements();
 
   const handlePayment = async () => {
-    // if (!stripe || !elements || !appointmentId) return;
+    if (!stripe || !elements || !appointmentId) {
+      setError("Payment system not initialized");
+      return;
+    }
 
     try {
       setPaymentStatus("processing");
       setError("");
-      console.log(appointmentId);
 
+      // Create payment intent
       const res = await httpService.postWithAuth("/payment/create-order", {
         appointmentId,
       });
-      
 
       if (!res.success) throw new Error(res.message);
 
@@ -65,8 +67,10 @@ const PaymentForm = ({
       });
 
       if (result.error) {
+        console.error('Payment error:', result.error);
         throw new Error(result.error.message);
       } else if (result.paymentIntent?.status === "succeeded") {
+        // Verify payment on backend
         const verifyRes = await httpService.postWithAuth("/payment/verify-payment", {
           appointmentId,
           paymentIntentId: result.paymentIntent.id,

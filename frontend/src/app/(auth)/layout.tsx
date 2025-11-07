@@ -29,7 +29,7 @@ const layout = ({children}:{children:React.ReactNode}) => {
      <div className='hidden lg:block w-1/2 relative overflow-hidden'>
          <div className='absolute inset-0 bg-gradient-to-br from-blue-900/20 to-transparent z-10'>
          </div>
-         <div className='w-full h-full bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 flex items-center justify-center'>
+         <div className='w-full h-full bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 flex items-center justify-center'>
             <div className='text-center text-white p-8 max-w-md'>
               <div className='w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop:blur-sm'>
                          <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,10 +37,10 @@ const layout = ({children}:{children:React.ReactNode}) => {
               </svg>
 
               </div>
-              <h2 className='text-4xl font-bold mb-4'>Welcome to MediCare+</h2>
+              <h2 className='text-4xl font-bold mb-4'>Welcome to Jivika</h2>
               <p className='text-xl opacity-90 mb-4'>Your health, our priority</p>
              <p className='text-lg opacity-75'>
-                Connecting patients with certified healthcare providers for quality medical consultations.
+                Connecting patients with certified healthcare providers with complete security.
              </p>
             </div>
          </div>

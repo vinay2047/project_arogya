@@ -51,11 +51,11 @@ payoutStatus: {
     paymentMethod: {type:String,default:'Online'},
 
 
-    //razorPay payment field
-    razorpayOrderId: {type:String},
-    razorpayPaymentId: {type:String},
-    razorpaySignature: {type:String},
-    paymentDate:{type:Date}
+    // Stripe payment fields
+    stripePaymentIntentId: {type: String},
+    stripePaymentStatus: {type: String},
+    paymentDate:{type:Date},
+    lastPaymentError: {type: String}
 
 
 },{timestamps:true});

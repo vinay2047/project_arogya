@@ -75,7 +75,7 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
     <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-teal-100 via-white to-teal-50">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-extrabold text-teal-700 tracking-tight drop-shadow-md">
-          MediCare<span className="text-teal-500">+</span>
+          Jivika<span className="text-teal-500"></span>
         </h1>
       </div>
 

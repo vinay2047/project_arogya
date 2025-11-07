@@ -6,7 +6,8 @@ const Patient = require('../modal/Patient')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-
+const Otp = require("../modal/otp");
+const transporter = require('../utils/mailer');
 const router = express.Router();
 
 
@@ -144,9 +145,46 @@ router.post('/doctor/register',
     }
  )
 
+ router.post('/send-otp',async(req,res)=>{
+    const {email} = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    try{
+        await Otp.create({email,otp});
+
+        await transporter.sendMail({
+            from :process.env.EMAIL_USER,
+            to: email,
+            subject:"Verify your email- Jivika",
+            html:`<h3>Your otp is ${otp}</h3><p>It will expire in 15 minutes</p>`
+        });
+
+        res.json({success: true, message: "Otp sent successfully"});
+    }catch(error){
+        res.status(500).json({success: false, message:error.message});
+    }
+ })
+
+ router.post("/verify-otp",async(req,res)=>{
+    const {email,otp} = req.body;
+    try{
+        const record = await otp.findOne({email,otp});
+        if(!record){
+            return res.status(400).json({success: false, message:"Invalid or expired OTP"});
+
+        }
+        await Otp.deleteMany({email});
+        res.json({success: true, message: "Email verified successfully"})
+    }catch(error){
+        res.status(500).json({success: false, message: error.message});
+    }
+ })
 
  //Auth failure
  router.get('/failure', (req,res) => res.badRequest('Google authentication Failed'))
 
 
+
+
  module.exports = router;
+
+

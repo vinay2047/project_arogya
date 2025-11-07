@@ -9,6 +9,69 @@ const router = express.Router();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Stripe webhook handler
+router.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+
+  try {
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        await handlePaymentSuccess(event.data.object);
+        break;
+      case 'payment_intent.payment_failed':
+        await handlePaymentFailure(event.data.object);
+        break;
+    }
+
+    res.json({received: true});
+  } catch (err) {
+    console.error('Webhook Error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+});
+
+async function handlePaymentSuccess(paymentIntent) {
+  try {
+    const appointmentId = paymentIntent.metadata.appointmentId;
+    const appointment = await Appointment.findById(appointmentId);
+    
+    if (!appointment) return;
+
+    appointment.paymentStatus = 'Paid';
+    appointment.stripePaymentStatus = 'succeeded';
+    appointment.paymentMethod = 'Stripe';
+    appointment.stripePaymentIntentId = paymentIntent.id;
+    appointment.paymentDate = new Date();
+    
+    await appointment.save();
+  } catch (error) {
+    console.error('Payment success handler error:', error);
+  }
+}
+
+async function handlePaymentFailure(paymentIntent) {
+  try {
+    const appointmentId = paymentIntent.metadata.appointmentId;
+    const appointment = await Appointment.findById(appointmentId);
+    
+    if (!appointment) return;
+
+    appointment.paymentStatus = 'Failed';
+    appointment.stripePaymentStatus = 'failed';
+    appointment.lastPaymentError = paymentIntent.last_payment_error?.message;
+    
+    await appointment.save();
+  } catch (error) {
+    console.error('Payment failure handler error:', error);
+  }
+}
+
 // Create Payment Intent
 router.post(
   "/create-order",
@@ -37,8 +100,11 @@ router.post(
         return res.badRequest("Payment already completed");
 
       // Create a PaymentIntent
+      const amount = Math.round(appointment.totalAmount * 100); // Convert to smallest currency unit
+
+      // Create a PaymentIntent with additional security measures
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: appointment.totalAmount * 100, // amount in paise
+        amount,
         currency: "inr",
         description: `Appointment with Dr. ${appointment.doctorId.name}`,
         metadata: {
@@ -46,10 +112,17 @@ router.post(
           doctorName: appointment.doctorId.name,
           patientName: appointment.patientId.name,
           consultationType: appointment.consultationType,
-          date: appointment.date,
+          date: appointment.date.toISOString(),
           slotStart: appointment.slotStartIso,
           slotEnd: appointment.slotEndIso,
         },
+        receipt_email: appointment.patientId.email,
+        setup_future_usage: 'off_session',
+        statement_descriptor: 'HEALTHCARE MGMT', // Maximum 22 characters
+        statement_descriptor_suffix: 'APPOINTMENT',
+        automatic_payment_methods: {
+          enabled: false
+        }
       });
       console.log(paymentIntent);
 
@@ -101,11 +174,13 @@ router.post(
       if (paymentIntent.status !== "succeeded")
         return res.badRequest("Payment not completed or failed");
 
-      // Update appointment payment details
-      appointment.paymentStatus = "Paid";
-      appointment.paymentMethod = "Stripe";
-      appointment.stripePaymentIntentId = paymentIntent.id;
-      appointment.paymentDate = new Date();
+      // Update appointment payment details if not already updated by webhook
+      if (appointment.paymentStatus !== "Paid") {
+        appointment.paymentStatus = "Paid";
+        appointment.stripePaymentStatus = "succeeded";
+        appointment.paymentMethod = "Stripe";
+        appointment.paymentDate = new Date();
+      }
 
       await appointment.save();
 
