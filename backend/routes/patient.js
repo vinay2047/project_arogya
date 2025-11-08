@@ -12,6 +12,7 @@ const { sanitizeText } = require('../services/sanitize.service');
 const { formatWithGemini } = require('../services/gemini.service');
 
 const Document = require('../modal/Document'); // new model
+const KnowledgeGraph = require('../modal/Knowledge_Graph');
 
 const router = express.Router();
 
@@ -130,6 +131,48 @@ router.post(
         message: 'Upload or LLM processing failed',
         errors: [error.message],
       });
+    }
+  }
+);
+
+// Share document data for knowledge graph
+router.post(
+  '/documents/:documentId/share',
+  authenticate,
+  requireRole('patient'),
+  async (req, res) => {
+    try {
+      // Find the document
+      const document = await Document.findOne({
+        _id: req.params.documentId,
+        patient: req.user._id,
+      });
+
+      if (!document) {
+        return res.notFound('Document not found');
+      }
+
+      // Create knowledge graph entry
+      const knowledgeEntry = new KnowledgeGraph({
+        source: 'patient_document',
+        sourceId: document._id,
+        patientId: req.user._id,
+        data: document.structuredData,
+        documentType: document.fileType,
+        timestamp: new Date(),
+      });
+
+      await knowledgeEntry.save();
+
+      // Update document to mark it as shared
+      document.sharedToKnowledgeGraph = true;
+      document.sharedAt = new Date();
+      await document.save();
+
+      res.ok(null, 'Data shared successfully');
+    } catch (error) {
+      console.error(error);
+      res.serverError('Failed to share data', [error.message]);
     }
   }
 );
