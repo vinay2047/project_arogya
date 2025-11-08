@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
@@ -22,11 +23,14 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
     "nodemailer": "^7.0.10",
     "nodemon": "^3.1.10",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "pdf-parse": "^2.4.5",
     "razorpay": "^2.9.6",
-    "stripe": "^19.3.0"
+    "stripe": "^19.3.0",
+    "tesseract.js": "^6.0.1"
   }
 }
