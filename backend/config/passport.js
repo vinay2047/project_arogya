@@ -1,12 +1,12 @@
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const Patient = require("../modal/Patient");
-const Doctor = require("../modal/Doctor");
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const Patient = require('../models/Patient');
+const Doctor = require('../models/Doctor');
 
-require("dotenv").config();
+require('dotenv').config();
 
 passport.use(
-  "google",
+  'google',
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -17,13 +17,13 @@ passport.use(
 
     async (req, accessToken, refreshToken, profile, done) => {
       try {
-        const userType = req.query.state || "patient";
+        const userType = req.query.state || 'patient';
 
         const { emails, displayName, photos } = profile;
         const email = emails?.[0]?.value;
         const photo = photos?.[0]?.value;
 
-        if (userType === "doctor") {
+        if (userType === 'doctor') {
           let user = await Doctor.findOne({ email });
           if (!user) {
             user = await Doctor.create({
@@ -41,7 +41,7 @@ passport.use(
             }
           }
 
-          return done(null, { user, type: "doctor" });
+          return done(null, { user, type: 'doctor' });
         } else {
           let user = await Patient.findOne({ email });
           if (!user) {
@@ -60,7 +60,7 @@ passport.use(
             }
           }
 
-          return done(null, { user, type: "patient" });
+          return done(null, { user, type: 'patient' });
         }
       } catch (error) {
         return done(error);
@@ -68,6 +68,5 @@ passport.use(
     }
   )
 );
-
 
 module.exports = passport;

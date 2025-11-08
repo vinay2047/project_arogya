@@ -1,5 +1,5 @@
 const express = require('express');
-const Patient = require('../modal/Patient');
+const Patient = require('../models/Patient');
 const { authenticate, requireRole } = require('../middleware/auth');
 const { body } = require('express-validator');
 const { computeAgeFromDob } = require('../utils/date');
@@ -11,7 +11,7 @@ const { extractTextFromFile } = require('../services/extra.service');
 const { sanitizeText } = require('../services/sanitize.service');
 const { formatWithGemini } = require('../services/gemini.service');
 
-const Document = require('../modal/Document'); // new model
+const Document = require('../models/Document'); // new model
 
 const router = express.Router();
 
