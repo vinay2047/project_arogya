@@ -1,7 +1,9 @@
+// services/graph.service.js
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const KnowledgeGraph = require('../models/KnowledgeGraph');
 
+// Existing function left as-is
 async function buildKnowledgeGraphFromGemini(userId, text) {
   const API_KEY = process.env.GEMINI_API_KEY;
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
@@ -34,12 +36,7 @@ ${text}
     const response = await axios.post(
       endpoint,
       {
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: prompt }],
-          },
-        ],
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
       },
       { headers: { 'Content-Type': 'application/json' } }
     );
@@ -74,4 +71,47 @@ async function saveGeminiKnowledgeGraph(userId, text) {
   return doc;
 }
 
-module.exports = { buildKnowledgeGraphFromGemini, saveGeminiKnowledgeGraph };
+/**
+ * ✅ Update an existing Knowledge Graph intelligently.
+ * If nodes/edges overlap, merge their properties.
+ */
+async function updateGeminiKnowledgeGraph(graphId, newText) {
+  const existing = await KnowledgeGraph.findOne({ graphId });
+  if (!existing) throw new Error('Graph not found for update');
+
+  // Generate new graph data from Gemini
+  const newGraph = await buildKnowledgeGraphFromGemini(
+    existing.userId,
+    newText
+  );
+
+  // Merge logic — keeps old nodes & edges that aren’t redefined
+  const mergedNodes = [
+    ...existing.nodes,
+    ...newGraph.nodes.filter(
+      (n) => !existing.nodes.some((old) => old.nodeId === n.nodeId)
+    ),
+  ];
+
+  const mergedEdges = [
+    ...existing.edges,
+    ...newGraph.edges.filter(
+      (e) => !existing.edges.some((old) => old.edgeId === e.edgeId)
+    ),
+  ];
+
+  existing.summary = newGraph.summary || existing.summary;
+  existing.nodes = mergedNodes;
+  existing.edges = mergedEdges;
+  existing.info = [...(existing.info || []), ...(newGraph.info || [])];
+  existing.updatedAt = new Date();
+
+  await existing.save();
+  return existing;
+}
+
+module.exports = {
+  buildKnowledgeGraphFromGemini,
+  saveGeminiKnowledgeGraph,
+  updateGeminiKnowledgeGraph,
+};
