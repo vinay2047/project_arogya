@@ -263,13 +263,13 @@ const PatientDashboardContent = () => {
     <div className="flex h-screen bg-gray-50">
       <DashboardSidebar />
       <div className="flex-1 pl-0 md:pl-64">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-8 py-6">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-md md:text-3xl font-bold text-gray-900">
+              <h1 className="text-md md:text-3xl font-bold text-black">
                 My Appointments
               </h1>
-              <p className="text-xs md:text-lg text-gray-600">
+              <p className="text-xs md:text-lg pt-2 text-black/80">
                 Manage your healthcare appointments
               </p>
             </div>
@@ -285,13 +285,13 @@ const PatientDashboardContent = () => {
             </div>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="upcoming" className="flex items-center space-x-2">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col space-y-6">
+            <TabsList className="w-full md:w-1/3 mx-auto grid grid-cols-2 h-14 rounded-full gap-4 justify-center items-center">
+              <TabsTrigger value="upcoming" className="flex items-center rounded-full justify-center space-x-2">
                 <Clock className="w-4 h-4" />
                 <span>Upcoming ({tabCounts.upcoming})</span>
               </TabsTrigger>
-              <TabsTrigger value="past" className="flex items-center space-x-2">
+              <TabsTrigger value="past" className="flex items-center justify-center rounded-full space-x-2">
                 <Calendar className="w-4 h-4" />
                 <span>Past ({tabCounts.past})</span>
               </TabsTrigger>

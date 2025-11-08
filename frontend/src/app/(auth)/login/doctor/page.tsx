@@ -1,8 +1,8 @@
 import AuthForm from "@/components/auth/AuthForm";
 
 export const metadata = {
-  title: 'Doctor Login - MediCare+',
-  description: 'Healthcare provider sign in to MediCare+ platform. Manage your practice and consultations.',
+  title: 'Doctor Login - Jivika',
+  description: 'Healthcare provider sign in to Jivika platform. Manage your practice and consultations.',
 };
 
 

@@ -2,51 +2,102 @@
 import { userAuthStore } from '@/store/authStore';
 import { redirect } from 'next/navigation';
 import React, { useEffect } from 'react'
+import Image from 'next/image'; // Import Next.js Image component
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 
-const layout = ({children}:{children:React.ReactNode}) => {
+const sliderContent = [
+  {
+    key: 'slide1',
+    imgSrc: '/1.jpg',
+    title: 'Welcome to Jivika',
+    description: 'Your health, our priority. Connecting you with certified providers.',
+  },
+  {
+    key: 'slide2',
+    imgSrc: '/2.jpg', // Example: /images/secure-data.jpg
+    title: 'Secure & Confidential',
+    description: 'Your medical data is safe with our end-to-end encryption.',
+  },
+  {
+    key: 'slide3',
+    imgSrc: '/3.jpg', // Example: /images/easy-booking.jpg
+    title: 'Book Appointments Easily',
+    description: 'Find the right doctor and book your slot in just a few clicks.',
+  },
+]
 
- const {isAuthenticated,user} = userAuthStore();
+const Layout = ({ children }: { children: React.ReactNode }) => {
+
+  const { isAuthenticated, user } = userAuthStore();
+
+  // --- No changes to your core auth logic ---
   useEffect(() => {
-    if(isAuthenticated &&  user) {
-      if(!user.isVerified){
+    if (isAuthenticated && user) {
+      if (!user.isVerified) {
         redirect(`/onboarding/${user.type}`)
-      }else{
-        if(user.type === 'doctor'){
+      } else {
+        if (user.type === 'doctor') {
           redirect('/doctor/dashboard')
-        }else{
+        } else {
           redirect('/patient/dashboard')
         }
       }
     }
-  },[isAuthenticated,user])
+  }, [isAuthenticated, user])
+
+  // --- Embla Carousel Hook ---
+  // We use the Autoplay plugin, looping, with a 4-second delay
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 4000, stopOnInteraction: false }),
+  ])
+
   return (
-    <div className='min-h-screen flex'>
-     
-     <div className='w-full lg:w-1/2 flex items-center justify-center p-6 bg-white'>
-      {children}
-     </div>
+    <div className='min-h-screen flex bg-white'>
 
-     <div className='hidden lg:block w-1/2 relative overflow-hidden'>
-         <div className='absolute inset-0 bg-gradient-to-br from-blue-900/20 to-transparent z-10'>
-         </div>
-         <div className='w-full h-full bg-gradient-to-br from-teal-600 via-teal-700 to-teal-800 flex items-center justify-center'>
-            <div className='text-center text-white p-8 max-w-md'>
-              <div className='w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop:blur-sm'>
-                         <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+      {/* --- LEFT SIDE: Image Slider --- */}
+      <div className='hidden lg:block w-1/2 relative overflow-hidden' ref={emblaRef}>
+        <div className='flex h-full'>
+          {sliderContent.map((slide) => (
+            // Each slide
+            <div
+              className='flex-[0_0_100%] min-w-0 h-full relative'
+              key={slide.key}
+            >
+              {/* Background Image */}
+              <Image
+                src={slide.imgSrc}
+                alt={slide.title}
+                fill
+                style={{ objectFit: 'cover' }}
+                className='z-0'
+                priority={slide.key === 'slide1'} // Load the first image faster
+              />
+              {/* Gradient overlay from bottom for readability */}
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent z-10" />
 
+              {/* Text Content */}
+              <div className='relative z-20 flex flex-col justify-end h-full text-white p-16'>
+                <div className='max-w-md'>
+                  <h2 className='text-4xl font-bold mb-4'>{slide.title}</h2>
+                  <p className='text-xl opacity-90'>{slide.description}</p>
+                </div>
               </div>
-              <h2 className='text-4xl font-bold mb-4'>Welcome to Jivika</h2>
-              <p className='text-xl opacity-90 mb-4'>Your health, our priority</p>
-             <p className='text-lg opacity-75'>
-                Connecting patients with certified healthcare providers with complete security.
-             </p>
             </div>
-         </div>
-     </div>
+          ))}
+        </div>
+      </div>
+
+      {/* --- RIGHT SIDE: Auth Form --- */}
+      <div className='w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 overflow-y-auto'>
+        {/* We add a max-width to the form for better readability on large screens */}
+        <div className='w-full max-w-md'>
+          {children}
+        </div>
+      </div>
+
     </div>
   )
 }
 
-export default layout
+export default Layout;

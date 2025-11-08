@@ -18,6 +18,15 @@ interface AuthFormProps {
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// A simple logo component. You can replace this with your actual <Logo />
+const Logo = () => (
+  <Link href="/" className="inline-block">
+    <h1 className="text-3xl font-extrabold text-[#1e6190] tracking-tight drop-shadow-md">
+      Jivika<span className="text-[#52b69a]">+</span>
+    </h1>
+  </Link>
+);
+
 const AuthForm = ({ type, userRole }: AuthFormProps) => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -65,28 +74,22 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
   };
 
   const isSignup = type === 'signup';
-  const title = isSignup ? 'Create your account' : 'Welcome back';
-  const buttonText = isSignup ? 'Create Account' : 'Sign In';
+  const title = isSignup ? 'Create your Account' : 'Welcome Back!';
+  const buttonText = isSignup ? 'Create Account' : 'Sign in';
   const altLinkText = isSignup ? 'Already have an account?' : "Don't have an account?";
   const altLinkAction = isSignup ? 'Sign in' : 'Sign up';
   const altLinkPath = isSignup ? `/login/${userRole}` : `/signup/${userRole}`;
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-teal-100 via-white to-teal-50">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-extrabold text-teal-700 tracking-tight drop-shadow-md">
-          Jivika<span className="text-teal-500"></span>
-        </h1>
-      </div>
-
-      <Card className="w-full max-w-md bg-white/70 backdrop-blur-md border border-teal-100 shadow-xl rounded-3xl">
-        <CardContent className="p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    // We wrap the form in a full-height, centered container with a gradient
+    <div className="flex flex-col justify-center items-center w-full bg-white px-4 py-8">
+        <div className="w-full max-w-md p-8 md:p-10">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-left">
             {title}
           </h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm text-center">
+            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm text-center">
               {error}
             </div>
           )}
@@ -102,14 +105,14 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="border border-teal-200 focus:border-teal-500 focus:ring-teal-500 rounded-xl"
+                  className="border border-teal-200 focus:border-teal-500 focus:ring-teal-500 rounded-xl py-3"
                   required
                 />
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700 font-medium">
+              <Label htmlFor="email" className="text-black/80 font-medium">
                 Email
               </Label>
               <Input
@@ -117,7 +120,7 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="border border-teal-200 focus:border-teal-500 focus:ring-teal-500 rounded-xl"
+                className="border border-[#52b69a]/50 focus:border-[#52b69a]/50 focus:ring-[#52b69a]/50 rounded-lg py-3"
                 required
               />
             </div>
@@ -132,7 +135,7 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="border border-teal-200 focus:border-teal-500 focus:ring-teal-500 rounded-xl pr-10"
+                  className="border border-[#52b69a]/50 focus:border-[#52b69a]/50 focus:ring-[#52b69a]/50 rounded-lg pr-10 py-3"
                   required
                 />
                 <Button
@@ -148,42 +151,57 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
             </div>
 
             {isSignup && (
-              <div className="flex items-start space-x-2 text-sm">
+              <div className="flex items-start space-x-2 text-sm pt-2">
                 <Checkbox
                   id="terms"
                   checked={agreeToTerms}
                   onCheckedChange={(checked) => setAgreeToTerms(checked as boolean)}
+                  className="mt-1"
                 />
                 <label htmlFor="terms" className="text-gray-600 leading-5">
                   I agree to the{' '}
-                  <Link href="#" className="text-teal-600 hover:underline font-medium">
+                  <Link href="#" className="text-[#1e6190] hover:underline font-medium">
                     Terms
                   </Link>{' '}
                   and{' '}
-                  <Link href="#" className="text-teal-600 hover:underline font-medium">
+                  <Link href="#" className="text-[#1e6190] hover:underline font-medium">
                     Privacy Policy
                   </Link>
                   .
                 </label>
               </div>
             )}
-
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold py-3 rounded-full shadow-md transition-all"
-              disabled={loading || (isSignup && !agreeToTerms)}
-            >
-              {loading ? `${isSignup ? 'Creating' : 'Signing'} in...` : buttonText}
-            </Button>
+            
+            {/* --- MODIFIED BUTTON ALIGNMENT --- */}
+            <div className="flex justify-end pt-4">
+              <Button
+                type="submit"
+                className="bg-[#1e6190] hover:bg-[#52b69a] text-white font-semibold py-3 px-8 rounded-full transition-all"
+                disabled={loading || (isSignup && !agreeToTerms)}
+              >
+                {loading ? `${isSignup ? 'Creating' : 'Signing'}...` : buttonText}
+              </Button>
+            </div>
           </form>
 
-          <div className="mt-6">
-            <Separator />
-            <div className="mt-6 space-y-3">
+          {/* --- SEPARATOR & GOOGLE AUTH --- */}
+          <div className="mt-8">
+            <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-black/30"></span>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                    <span className="bg-white/70 backdrop-blur-sm px-2 text-black/70">
+                        or continue with
+                    </span>
+                </div>
+            </div>
+            
+            <div className="mt-6">
               <Button
                 type="button"
                 variant="outline"
-                className="w-full rounded-full border-teal-300 text-teal-700 hover:bg-teal-50"
+                className="w-full rounded-full border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-3"
                 onClick={handleGoogleAuth}
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -209,14 +227,14 @@ const AuthForm = ({ type, userRole }: AuthFormProps) => {
             </div>
           </div>
 
-          <div className="mt-6 text-center text-sm">
-            <span className="text-gray-600">{altLinkText} </span>
-            <Link href={altLinkPath} className="text-teal-600 hover:underline font-medium">
+          {/* --- MODIFIED ALT LINK ALIGNMENT --- */}
+          <div className="mt-8 text-center text-sm">
+            <span className="text-black/80 mr-1">{altLinkText}</span>
+            <Link href={altLinkPath} className="text-[#1e6190] hover:underline font-medium">
               {altLinkAction}
             </Link>
           </div>
-        </CardContent>
-      </Card>
+        </div>
     </div>
   );
 };
