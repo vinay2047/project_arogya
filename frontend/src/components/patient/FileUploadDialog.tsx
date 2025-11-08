@@ -85,7 +85,7 @@ export function FileUploadDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2 rounded-full">
           <Upload className="h-4 w-4" />
           Upload Files
         </Button>

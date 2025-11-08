@@ -21,6 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { getStatusColor } from "@/lib/constant";
 import PrescriptionViewModal from "../doctor/PrescriptionViewModal";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 const PatientDashboardContent = () => {
   const { user } = userAuthStore();
@@ -96,125 +97,100 @@ const PatientDashboardContent = () => {
   if (!user) return null;
 
   const AppointmentCard = ({ appointment }: { appointment: Appointment }) => (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardContent className="p-6">
-        <div className="flex flex-col items-center md:flex-row md:items-start md:space-x-6">
-          <div className="flex-shrink-0 flex justify-center md:justify-start">
-            <Avatar className="w-20 h-20">
-              <AvatarImage
-                src={appointment.doctorId?.profileImage}
-                alt={appointment.doctorId?.name}
-              />
-              <AvatarFallback className="bg-teal-100 text-teal-600 text-lg font-semibold">
-                {appointment.doctorId?.name?.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-
-          <div className="mt-4 md:mt-0 flex-1 w-full text-center md:text-left">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {appointment.doctorId?.name}
-                </h3>
-                <p className="text-gray-600">
-                  {appointment.doctorId?.specialization}
-                </p>
-                <div className="flex items-center justify-center md:justify-start space-x-1 text-sm text-gray-500 mt-1">
-                  <MapPin className="w-3 h-3" />
-                  <span>{appointment.doctorId?.hospitalInfo?.name}</span>
-                </div>
-              </div>
-
-              <div className="mt-2 md:mt-0 text-center md:text-right">
-                <Badge className={getStatusColor(appointment.status)}>
-                  {appointment.status}
-                </Badge>
-                {isToday(appointment.slotStartIso) && (
-                  <div className="text-xs text-teal-600 font-semibold mt-1">
-                    TODAY
-                  </div>
-                )}
-              </div>
+    <Card className="rounded-3xl border border-gray-100 overflow-hidden">
+      <CardContent className="px-6">
+        {/* --- 1. Avatar (Top & Centered) --- */}
+        <div className="flex justify-center relative">
+          {isToday(appointment.slotStartIso) && (
+            <div className="absolute top-1 right-1">
+              <Badge className="bg-teal-50 text-teal-700 px-2 py-1 rounded-lg text-xs font-semibold">
+                TODAY
+              </Badge>
             </div>
-
-            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-center md:justify-start space-x-2 text-sm text-gray-600">
-                  <Calendar className="w-4 h-4" />
-                  <span>{formatDate(appointment.slotStartIso)}</span>
-                </div>
-
-                <div className="flex items-center justify-center md:justify-start space-x-2 text-sm text-gray-600">
-                  {appointment.consultationType === "Video Consultation" ? (
-                    <Video className="w-4 h-4" />
-                  ) : (
-                    <Phone className="w-4 h-4" />
-                  )}
-                  <span>{appointment.consultationType}</span>
-                </div>
-              </div>
-
-              <div className="text-center md:text-left">
-                <div className="flex justify-center gap-2 text-sm text-gray-600">
-                  <span className="font-semibold">Fee:</span>
-                  <p>₹{appointment.doctorId?.fees}</p>
-                </div>
-
-                {appointment.symptoms && (
-                  <div className="flex justify-center gap-2 text-sm text-gray-600 mt-1">
-                    <span className="font-semibold">Symptoms:</span>
-                    <p className="text-xs text-gray-500 line-clamp-2">
-                      {appointment.symptoms}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-col md:flex-row items-center md:justify-between space-y-3 md:space-y-0">
-              <div className="flex space-x-2">
-                {canJoinCall(appointment) && (
-                  <Link href={`/call/${appointment._id}`}>
-                    <Button size="sm" className="bg-green-600 hover:bg-green-700">
-                      <Video className="w-4 h-4 mr-2" />
-                      Join Call
-                    </Button>
-                  </Link>
-                )}
-
-                {appointment.status === "Completed" &&
-                  appointment.prescription && (
-                    <PrescriptionViewModal
-                      appointment={appointment}
-                      userType="patient"
-                      trigger={
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-green-700 border-green-200 hover:bg-green-50"
-                        >
-                          <FileText className="w-4 h-4 mr-2" />
-                          View Prescription
-                        </Button>
-                      }
-                    />
-                  )}
-              </div>
-
-              {appointment.status === "Completed" && (
-                <div className="flex items-center space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          )}
+          <Avatar className="w-24 h-24">
+            <AvatarImage
+              src={appointment.doctorId?.profileImage}
+              alt={appointment.doctorId?.name}
+            />
+            <AvatarFallback className="bg-[#52b69a]/10 text-[#52b69a] text-3xl font-bold">
+              {appointment.doctorId?.name?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
         </div>
+
+        {/* --- 2. Doctor Info (Centered) --- */}
+        <div className="mt-4 text-center">
+          <h3 className="text-xl font-semibold text-black">
+            {appointment.doctorId?.name
+              ? appointment.doctorId.name.charAt(0).toUpperCase() + appointment.doctorId.name.slice(1)
+              : ""}
+          </h3>
+          <p className="text-black/80">
+            {appointment.doctorId?.specialization}
+          </p>
+        </div>
+
+        {/* --- 3. Status (Centered) --- */}
+        <div className="mt-4 flex flex-col items-center space-y-2">
+          <Badge className={getStatusColor(appointment.status)}>
+            {appointment.status}
+          </Badge>
+        </div>
+
+        <Separator className="my-6" />
+
+        {/* --- 4. Appointment Details (Grid) --- */}
+        <div className="flex-col">
+          {/* Date Info */}
+          <div className="flex items-center space-x-3 mb-2">
+            <Calendar className="w-4 h-4 text-[#52b69a] flex-shrink-0" />
+            <span className="text-sm text-black">
+              {formatDate(appointment.slotStartIso) }
+            </span>
+          </div>
+
+          {/* Consultation Type */}
+          <div className="flex items-center space-x-3 mb-2  ">
+            {appointment.consultationType === "Video Consultation" ? (
+              <Video className="w-4 h-4 text-[#52b69a] flex-shrink-0" />
+            ) : (
+              <Phone className="w-4 h-4 text-[#52b69a] flex-shrink-0" />
+            )}
+            <span className="text-sm text-black">
+              {appointment.consultationType}
+            </span>
+          </div>
+
+          <div className="flex items-center space-x-3">
+              <MapPin className="w-4 h-4 text-[#52b69a] flex-shrink-0" />
+            <span className="text-sm text-black">
+              {appointment.doctorId?.hospitalInfo?.name}
+            </span>
+          </div>
+
+          {/* Fee Info */}
+          <div className="flex justify-end space-x-3 mt-2">
+            <span className="text-lg font-semibold text-[#52b69a]">
+              ₹{appointment.doctorId?.fees}
+            </span>
+          </div>
+
+          {/* Symptoms Info */}
+          {/* {appointment.symptoms && (
+            <div className="flex items-start space-x-3 sm:col-span-2">
+              <span className="text-sm font-semibold text-gray-600 w-16">
+                Symptoms:
+              </span>
+              <p className="text-sm text-gray-800 line-clamp-2">
+                {appointment.symptoms}
+              </p>
+            </div>
+          )} */}
+        </div>
+
+        {/* --- 5. Actions & Rating (Bottom) --- */}
+        
       </CardContent>
     </Card>
   );
@@ -276,7 +252,7 @@ const PatientDashboardContent = () => {
 
             <div className="flex items-center space-x-4">
               <Link href="/doctor-list">
-                <Button>
+                <Button className="rounded-full bg-[#1e6190] hover:bg-[#52b69a]">
                   <Calendar className="w-4 h-4 mr-2" />
                   Book <span className="hidden md:block">New Appointment</span>
                 </Button>
@@ -288,11 +264,11 @@ const PatientDashboardContent = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col space-y-6">
             <TabsList className="w-full md:w-1/3 mx-auto grid grid-cols-2 h-14 rounded-full gap-4 justify-center items-center">
               <TabsTrigger value="upcoming" className="flex items-center rounded-full justify-center space-x-2">
-                <Clock className="w-4 h-4" />
+                <Clock className="w-4 h-4 text-[#52b69a]" />
                 <span>Upcoming ({tabCounts.upcoming})</span>
               </TabsTrigger>
               <TabsTrigger value="past" className="flex items-center justify-center rounded-full space-x-2">
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-4 h-4 text-[#52b69a]" />
                 <span>Past ({tabCounts.past})</span>
               </TabsTrigger>
             </TabsList>
@@ -316,7 +292,7 @@ const PatientDashboardContent = () => {
                   ))}
                 </div>
               ) : appointments.length > 0 ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {appointments.map((appointment) => (
                     <AppointmentCard key={appointment._id} appointment={appointment} />
                   ))}
