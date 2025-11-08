@@ -1,5 +1,10 @@
 const axios = require('axios');
-const { v4: uuidv4 } = require('uuid');
+let uuidv4;
+
+(async () => {
+  const { v4 } = await import('uuid');
+  uuidv4 = v4;
+})();
 const KnowledgeGraph = require('../models/KnowledgeGraph');
 
 async function buildKnowledgeGraphFromGemini(userId, text) {

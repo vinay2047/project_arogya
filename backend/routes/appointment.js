@@ -22,12 +22,25 @@ router.get(
 
   async (req, res) => {
     try {
-      const { status } = req.query;
+      const { status, filter: timeFilter } = req.query;
       const filter = { doctorId: req.auth.id };
+      const now = new Date();
 
       if (status) {
         const statusArray = Array.isArray(status) ? status : [status];
         filter.status = { $in: statusArray };
+      }
+
+      // Add time-based filtering
+      if (timeFilter === 'upcoming') {
+        filter.slotStartIso = { $gt: now };
+        filter.status = { $in: ['Scheduled', 'In Progress'] };
+      } else if (timeFilter === 'past') {
+        filter.slotStartIso = { $lt: now };
+        filter.$or = [
+          { status: 'Completed' },
+          { status: 'Cancelled' }
+        ];
       }
 
       const appointment = await Appointment.find(filter)
@@ -36,7 +49,7 @@ router.get(
           'doctorId',
           'name fees phone specialization profileImage hospitalInfo'
         )
-        .sort({ slotStartIso: 1, slotEndIso: 1 });
+        .sort({ slotStartIso: timeFilter === 'upcoming' ? 1 : -1 });
 
       res.ok(appointment, 'Appointment fetched successfully');
     } catch (error) {
@@ -62,20 +75,34 @@ router.get(
 
   async (req, res) => {
     try {
-      const { status } = req.query;
+      const { status, filter: timeFilter } = req.query;
       const filter = { patientId: req.auth.id };
+      const now = new Date();
 
       if (status) {
         const statusArray = Array.isArray(status) ? status : [status];
         filter.status = { $in: statusArray };
       }
+
+      // Add time-based filtering
+      if (timeFilter === 'upcoming') {
+        filter.slotStartIso = { $gt: now };
+        filter.status = { $in: ['Scheduled', 'In Progress'] };
+      } else if (timeFilter === 'past') {
+        filter.slotStartIso = { $lt: now };
+        filter.$or = [
+          { status: 'Completed' },
+          { status: 'Cancelled' }
+        ];
+      }
+
       const appointment = await Appointment.find(filter)
         .populate(
           'doctorId',
           'name fees phone specialization hospitalInfo profileImage'
         )
         .populate('patientId', 'name email profileImage')
-        .sort({ slotStartIso: 1, slotEndIso: 1 });
+        .sort({ slotStartIso: timeFilter === 'upcoming' ? 1 : -1 });
 
       res.ok(appointment, 'Appointment fetched successfully');
     } catch (error) {

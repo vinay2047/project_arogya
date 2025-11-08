@@ -90,21 +90,15 @@ export const useAppointmentStore = create<AppointmentState>((set, get) => ({
       const endPoint =
         role === "doctor" ? "/appointment/doctor" : "/appointment/patient";
       const queryParams = new URLSearchParams();
-      if (tab === "upcoming") {
-        queryParams.append("status", "Scheduled");
-        queryParams.append("status", "In Progress");
-      } else if (tab === "past") {
-        queryParams.append("status", "Completed");
-        queryParams.append("status", "Cancelled");
+      
+      // Add tab-based filtering
+      if (tab === "upcoming" || tab === "past") {
+        queryParams.append("filter", tab);
       }
 
+      // Add any additional filters
       Object.entries(filters).forEach(([key, value]) => {
-        if (
-          value !== undefined &&
-          value !== null &&
-          value !== "" &&
-          key !== "status"
-        ) {
+        if (value !== undefined && value !== null && value !== "") {
           if (Array.isArray(value)) {
             value.forEach((v) => queryParams.append(key, v.toString()));
           } else {

@@ -13,11 +13,8 @@ const documentSchema = new mongoose.Schema(
     sanitizedText: { type: String, required: true },
     formattedText: { type: String }, // Human-readable
     structuredData: { type: Object }, // JSON from Gemini
-    sharedToKnowledgeGraph: { type: Boolean, default: false },
-    sharedAt: { type: Date }
   },
   { timestamps: true }
 );
-
 
 module.exports = mongoose.model('Document', documentSchema);

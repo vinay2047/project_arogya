@@ -23,14 +23,17 @@ import { getStatusColor } from "@/lib/constant";
 import PrescriptionViewModal from "../doctor/PrescriptionViewModal";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+
 const PatientDashboardContent = () => {
   const { user } = userAuthStore();
   const { appointments, fetchAppointments, loading } = useAppointmentStore();
   const [activeTab, setActiveTab] = useState("upcoming");
-  const [tabCounts, setTabCounts] = useState({
-    upcoming: 0,
-    past: 0,
-  });
+  const [tabCounts, setTabCounts] = useState({ upcoming: 0, past: 0 });
+  const [graphId, setGraphId] = useState<string | null>(null);
+  const [showGraphModal, setShowGraphModal] = useState(false);
+  const [graphData, setGraphData] = useState<any>(null);
+  const [graphLoading, setGraphLoading] = useState(false);
 
   useEffect(() => {
     if (user?.type === "patient") {
@@ -257,7 +260,28 @@ const PatientDashboardContent = () => {
                   Book <span className="hidden md:block">New Appointment</span>
                 </Button>
               </Link>
-              <FileUploadDialog />
+              <FileUploadDialog onGraphCreated={setGraphId} />
+              {graphId && (
+                <Button variant="outline" onClick={async () => {
+                  setShowGraphModal(true);
+                  setGraphLoading(true);
+                  try {
+                    const token = localStorage.getItem("token");
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/graph/showGraph/${graphId}`, {
+                      method: "GET",
+                      headers: { Authorization: `Bearer ${token}` },
+                    });
+                    const result = await response.json();
+                    setGraphData(result.data || null);
+                  } catch (err) {
+                    setGraphData(null);
+                  }
+                  setGraphLoading(false);
+                }}>
+                  <FileText className="w-4 h-4 mr-2" />
+                  Show Graph
+                </Button>
+              )}
             </div>
           </div>
 
@@ -332,6 +356,31 @@ const PatientDashboardContent = () => {
             </TabsContent>
           </Tabs>
         </div>
+        {/* Graph Modal */}
+        <Dialog open={showGraphModal} onOpenChange={setShowGraphModal}>
+          <DialogContent className="sm:max-w-[650px]">
+            <DialogHeader>
+              <DialogTitle>Knowledge Graph</DialogTitle>
+              <DialogDescription>
+                This is your personalized healthcare knowledge graph generated from your uploaded document.
+              </DialogDescription>
+            </DialogHeader>
+            {graphLoading ? (
+              <div className="text-center py-8">Loading graph...</div>
+            ) : graphData ? (
+              <div className="space-y-2 text-sm">
+                <pre className="bg-gray-100 p-3 rounded-md overflow-x-auto text-xs">
+                  {JSON.stringify(graphData, null, 2)}
+                </pre>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-red-500">No graph data found.</div>
+            )}
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowGraphModal(false)}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
