@@ -61,11 +61,11 @@ const DoctorListPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Choose your doctor
+                Find Doctors
               </h1>
               <p className="text-gray-600 mt-1">
                 Find the perfect healthcare provider for your needs
@@ -75,10 +75,10 @@ const DoctorListPage = () => {
 
           <div className="flex gap-4 mb-6">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 " />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#52b69a] h-5 w-5 " />
               <Input
                 placeholder="Search doctors by name , specialization, or condition..."
-                className="pl-10 h-12 text-base"
+                className="pl-10 h-12 rounded-full text-base"
                 value={filters.search || ""}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
               />
@@ -86,7 +86,7 @@ const DoctorListPage = () => {
 
             <Button
               variant="outline"
-              className="h-12 px-4"
+              className="h-12 px-4 rounded-full"
               onClick={() => setShowFilters(!showFilters)}
             >
               <FilterIcon className="w-4 h-4 mr-2" />
@@ -102,12 +102,9 @@ const DoctorListPage = () => {
             </Button>
           </div>
 
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">
-              Browse by Category
-            </h3>
-
-            <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-hide">
+          <div>
+            <style>{`.hide-scrollbar::-webkit-scrollbar{display:none} .hide-scrollbar{-ms-overflow-style:none; scrollbar-width:none;}`}</style>
+            <div className="flex overflow-x-auto gap-3 pb-2 hide-scrollbar">
               <Button
                 variant={!filters.category ? "default" : "outline"}
                 className="flex-shrink-0 rounded-full"
@@ -143,9 +140,9 @@ const DoctorListPage = () => {
           </div>
 
           {showFilters && (
-            <Card className="p-4 mb-4 bg-gray-50">
+            <Card className="p-4 mb-4 mt-4 bg-gray-50">
               <div className="flex items-center justify-between mb-4 ">
-                <h3 className="font-semibold">Advanced Filters</h3>
+                <h2 className="font-semibold">Advanced Filters</h2>
 
                 <Button
                   variant="ghost"
@@ -240,10 +237,7 @@ const DoctorListPage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-4 text-sm text-gray-600">
-          {loading ? "Seaching..." : `${doctors.length} doctor found`}
-        </div>
+      <div className="max-w-7xl mx-auto px-6 py-6">
 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -269,9 +263,9 @@ const DoctorListPage = () => {
             {doctors.map((doctor) => (
               <Card
                 key={doctor._id}
-                className="hover:shadow-xl transition-all duration-300 bg-white border-0 shadow-md h-full"
+                className="rounded-3xl transition-all duration-300 bg-white border-0 h-full"
               >
-                <CardContent className="p-6 flex flex-col h-full">
+                <CardContent className="px-6 py-3 flex flex-col h-full">
                   <div className="text-center mb-4">
                     <Avatar className="w-20 h-20 mx-auto mb-3">
                       <AvatarImage
@@ -279,37 +273,20 @@ const DoctorListPage = () => {
                         alt={doctor.name}
                         className="object-cover"
                       />
-                      <AvatarFallback className="bg-gradient-to-br from-teal-100 to-teal-200 text-teal-700 text-xl font-bold">
-                        {doctor.name.charAt(0)}
+                      <AvatarFallback className="bg-[#52b69a]/10 text-[#52b69a] text-2xl font-bold">
+                        {doctor.name.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
 
-                    <h3 className="text-lg font-bold text-teal-700 mb-1">
-                      {doctor.name}
+                    <h3 className="text-lg font-bold text-black mb-1">
+                      {(doctor.name || "").charAt(0).toUpperCase() + (doctor.name || "").slice(1)}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-1">
-                      {doctor.specialization}
+                    <p className="text-gray-600 text-sm">
+                      {doctor.specialization} • {doctor.experience}+ yrs exp.
                     </p>
-
-                    <p className="text-gray-500 text-xs mb-2">
-                      {doctor.experience} years experience
-                    </p>
-
-                    <div className="flex items-center justify-center space-x-1 mb-3">
-                      <div className="flex">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className="w-4 h-4 fill-orange-400 text-orange-400"
-                          />
-                        ))}
-                      </div>
-                      <span className="font-bold">5.0</span>
-                      <span className="text-gray-500 text-xs">(620)</span>
-                    </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1 justify-center mb-4">
+                  <div className="flex flex-wrap gap-1 justify-center mb-8">
                     {doctor.category?.slice(0, 2).map((category, idx) => (
                       <Badge
                         key={idx}
@@ -329,26 +306,34 @@ const DoctorListPage = () => {
                     </Badge>
                   </div>
 
-                  <div className="space-y-2 mb-4 text-center">
-                    <div className="flex items-center justify-center text-gray-600">
-                      <MapPin className="w-4 h-4 mr-1"/>
-                      <span className="text-sm">{doctor.hospitalInfo.city}</span>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className="w-4 h-4 fill-orange-400 text-orange-400"
+                          />
+                        ))}
+                      </div>
+                      <div className="flex items-baseline space-x-2">
+                        <span className="font-bold">5.0</span>
+                        <span className="text-black/80 text-xs">(620)</span>
+                      </div>
                     </div>
 
-                           <div className="flex justify-center items-center gap-2 text-center">
-                     <p className="text-gray-600 text-md font-semibold">
-                      Consultation Fee:
-                     </p>
-                     <p className="font-bold text-green-600 text-lg">₹{doctor.fees}</p>
-                  </div>
+                    <div className="flex items-center text-black/80">
+                      <MapPin className="w-4 h-4 mr-1 text-[#52b69a]" />
+                      <span className="text-sm">{doctor.hospitalInfo?.city}</span>
+                    </div>
                   </div>
 
            
 
                   <div className="mt-auto">
                     <Link href={`/patient/booking/${doctor._id}`} className="block">
-                    <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-lg ply-2 text-sm font-medium shadow-lg hover:shadow-xl transition-all">
-                        Book Appointment
+                    <Button className="w-full h-12 bg-[#52b69a] hover:bg-[#1e6190] text-white rounded-full ply-2 text-sm font-medium transition-all">
+                        Book Appointment for ₹{doctor.fees}
                     </Button>
                     </Link>
 

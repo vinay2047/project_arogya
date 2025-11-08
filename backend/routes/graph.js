@@ -2,33 +2,51 @@ const express = require('express');
 const router = express.Router();
 const {
   saveGeminiKnowledgeGraph,
+  updateGeminiKnowledgeGraph,
 } = require('../services/geminiGraphBuilder.service');
 const { authenticate } = require('../middleware/auth');
 const KnowledgeGraph = require('../models/KnowledgeGraph');
+const Patient = require('../models/Patient');
 
-// POST /api/graph/saveGraph
 router.post('/saveGraph', authenticate, async (req, res) => {
   try {
     const userId = req.user._id;
-    const { text } = req.body;
+    const { text, patientId } = req.body;
 
-    if (!text) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Text is required' });
+    if (!text || !patientId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both text and patientId are required',
+      });
     }
 
-    const graph = await saveGeminiKnowledgeGraph(userId, text);
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Patient not found' });
+    }
 
-    await Patient.findByIdAndUpdate(patientId, { graphId: graph.graphId });
+    let graph;
+
+    if (patient.graphId) {
+      // ✅ Update existing graph
+      graph = await updateGeminiKnowledgeGraph(patient.graphId, text);
+    } else {
+      // 🆕 Create new graph
+      graph = await saveGeminiKnowledgeGraph(userId, text);
+      await Patient.findByIdAndUpdate(patientId, { graphId: graph.graphId });
+    }
 
     res.status(201).json({
       success: true,
-      message: 'Knowledge Graph created successfully!',
+      message: patient.graphId
+        ? 'Knowledge Graph updated successfully!'
+        : 'Knowledge Graph created successfully!',
       data: graph,
     });
   } catch (error) {
-    console.error(error);
+    console.error('Error saving/updating graph:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
