@@ -99,15 +99,15 @@ export const specializations = [
   export const contactInfo = [
   {
     icon: Phone,
-    text: "1-888-MEDICARE (1-888-633-4227)",
+    text: "(+91) 100-400-4040",
   },
   {
     icon: Mail,
-    text: "support@medicare-plus.com",
+    text: "support@jivika.in",
   },
   {
     icon: MapPin,
-    text: "Available across India",
+    text: "Prayagraj, UP, IN",
   },
 ];
 

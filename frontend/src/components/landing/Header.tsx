@@ -81,11 +81,13 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
         {/* Left side -> logo + navigation */}
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-teal-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-sm">
-              <Stethoscope className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src={
+                "/logo.png"
+              }/>
             </div>
 
-            <div className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent tracking-tight">
+            <div className="text-2xl font-bold text-black tracking-tight">
               Jivika
             </div>
           </Link>
@@ -180,12 +182,12 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
             {!isAuthenticated ? (
               <>
                 <Link href="/login/patient">
-                  <Button variant="ghost" className="text-teal-800 font-medium hover:text-teal-600">
-                    Log in
+                  <Button variant="ghost" className="text-[#1e6190] rounded-full font-medium hover:text-[#52b69a]">
+                    Login
                   </Button>
                 </Link>
                 <Link href="/signup/patient" className="hidden md:block">
-                  <Button className="bg-gradient-to-r from-teal-600 to-emerald-500 font-medium hover:from-teal-700 hover:to-emerald-600 rounded-full px-6 text-white">
+                  <Button className="bg-[#1e6190] font-medium hover:bg-[#52b69a] rounded-full px-6 text-white">
                     Book Consultation
                   </Button>
                 </Link>

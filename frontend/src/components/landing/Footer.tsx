@@ -6,22 +6,24 @@ import { Button } from "../ui/button";
 
 const Footer = () => {
   return (
-    <footer className="bg-teal-800 text-white">
+    <footer className="bg-[#1e6190] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Brand section */}
             <div className="lg:col-span-4">
               <div className="flex items-center space-x-2 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to text-teal-50 rounded-lg flex items-center justify-center">
-                  <Stethoscope className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <img src={
+                "/logo_white.png"
+              }/>
                 </div>
-                <div className="text-3xl font-bold bg-gradient-to-br from-white to-blue-100 bg-clip-text text-transparent">
+                <div className="text-3xl font-bold text-white">
                   Jivika
                 </div>
               </div>
 
-              <p className="text-blue-100 mb-6 text-lg leading-relaxed">
+              <p className="text-white/80 mb-6 text-lg leading-relaxed">
                 Your trusted healthcare partner providing quality medical
                 consultations with certified doctors online, anytime, anywhere.
               </p>
@@ -32,7 +34,7 @@ const Footer = () => {
                     key={index}
                     className="flex items-center space-x-3 text-blue-100"
                   >
-                    <item.icon className="w-4 h-4 text-teal-300" />
+                    <item.icon className="w-4 h-4 text-white" />
                     <span>{item.text}</span>
                   </div>
                 ))}
@@ -52,7 +54,7 @@ const Footer = () => {
                         <li key={linkIndex}>
                           <a
                             href={link.href}
-                            className="text-blue-200 hover:text-white transition-colors duration-200 text-sm hover:underline"
+                            className="text-white/80 hover:text-white transition-colors duration-200 text-sm hover:underline"
                           >
                             {link.text}
                           </a>
@@ -67,11 +69,11 @@ const Footer = () => {
         </div>
 
         {/* Newsletter section */}
-        <div className="py-8 border-t border-teal-700/50">
+        <div className="py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h4 className="font-semibold text-white mb-2">Stay Updated</h4>
-              <p className="text-blue-200 text-sm">
+              <p className="text-white/80 text-sm">
                 Get health tips and product updates delivered to your inbox.
               </p>
             </div>
@@ -89,12 +91,12 @@ const Footer = () => {
               <input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
-                className="px-4 py-2 rounded-lg bg-teal-800 border border-teal-700 text-white placeholder:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent min-w-[280px]"
+                placeholder="Enter your Email"
+                className="px-4 py-2 rounded-full bg-white border-[#52b69a]/60 text-black placeholder:text-black/70 focus:outline-none focus:ring-2 focus:ring-[#52b69a]/60 focus:border-transparent min-w-[280px]"
               />
               <Button
                 type="submit"
-                className="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded-lg whitespace-nowrap"
+                className="bg-[#52b69a] h-12 hover:bg-[#33967b] text-white px-6 py-2 rounded-full whitespace-nowrap"
               >
                 Subscribe
               </Button>
@@ -103,14 +105,14 @@ const Footer = () => {
         </div>
 
         {/* Bottom section */}
-        <div className="py-6 border-t border-teal-800">
+        <div className="py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            <div className="text-blue-200 text-sm">
-              <p>&copy; 2025 Jivika Health, Inc. All rights reserved.</p>
+            <div className="text-white/80 text-sm">
+              <p>&copy; 2025 Jivika Health, Inc. All Rights Reserved.</p>
             </div>
 
             <div className="flex items-center space-x-4">
-              <span className="text-blue-200 text-sm">Follow us:</span>
+              <span className="text-white/80 text-sm">Follow us:</span>
               <div className="flex space-x-3">
                 {socials.map(({ name, icon: Icon, url }) => (
                   <a
@@ -118,7 +120,7 @@ const Footer = () => {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 bg-teal-700/50 hover:bg-teal-800 rounded-full flex items-center justify-center transition-colors duration-200"
+                    className="w-8 h-8 bg-white/30 hover:bg-[#52b69a] rounded-full flex items-center justify-center transition-colors duration-200"
                     aria-label={`Follow us on ${name}`}
                   >
                     <Icon className="w-4 h-4 text-white" />
