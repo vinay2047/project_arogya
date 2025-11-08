@@ -1,27 +1,27 @@
-const express = require("express");
-const { query, body } = require("express-validator");
-const validate = require("../middleware/validate");
-const { authenticate, requireRole } = require("../middleware/auth");
-const Doctor = require("../modal/Doctor");
-const Appointment = require("../modal/Appointment");
+const express = require('express');
+const { query, body } = require('express-validator');
+const validate = require('../middleware/validate');
+const { authenticate, requireRole } = require('../middleware/auth');
+const Doctor = require('../models/Doctor');
+const Appointment = require('../models/Appointment');
 
 const router = express.Router();
 
 router.get(
-  "/list",
+  '/list',
   [
-    query("search").optional().isString(),
-    query("specialization").optional().isString(),
-    query("city").optional().isString(),
-    query("category").optional().isString(),
-    query("minFees").optional().isInt({ min: 0 }),
-    query("maxFees").optional().isInt({ min: 0 }),
-    query("sortBy")
+    query('search').optional().isString(),
+    query('specialization').optional().isString(),
+    query('city').optional().isString(),
+    query('category').optional().isString(),
+    query('minFees').optional().isInt({ min: 0 }),
+    query('maxFees').optional().isInt({ min: 0 }),
+    query('sortBy')
       .optional()
-      .isIn(["fees", "experience", "name", "createdAt"]),
-    query("sortOrder").optional().isIn(["asc", "desc"]),
-    query("page").optional().isInt({ min: 1 }),
-    query("limit").optional().isInt({ min: 1, max: 100 }),
+      .isIn(['fees', 'experience', 'name', 'createdAt']),
+    query('sortOrder').optional().isIn(['asc', 'desc']),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: 100 }),
   ],
   validate,
   async (req, res) => {
@@ -33,8 +33,8 @@ router.get(
         category,
         minFees,
         maxFees,
-        sortBy = "createdAt",
-        sortOrder = "desc",
+        sortBy = 'createdAt',
+        sortOrder = 'desc',
         page = 1,
         limit = 20,
       } = req.query;
@@ -43,9 +43,9 @@ router.get(
       if (specialization)
         filter.specialization = {
           $regex: `^${specialization}$`,
-          $options: "i",
+          $options: 'i',
         };
-      if (city) filter["hospitalInfo.city"] = { $regex: city, $options: "i" };
+      if (city) filter['hospitalInfo.city'] = { $regex: city, $options: 'i' };
       if (category) {
         filter.category = category;
       }
@@ -58,63 +58,63 @@ router.get(
 
       if (search) {
         filter.$or = [
-          { name: { $regex: search, $options: "i" } },
-          { specialization: { $regex: search, $options: "i" } },
-          { "hospitalInfo.name": { $regex: search, $options: "i" } },
+          { name: { $regex: search, $options: 'i' } },
+          { specialization: { $regex: search, $options: 'i' } },
+          { 'hospitalInfo.name': { $regex: search, $options: 'i' } },
         ];
       }
 
-      const sort = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
+      const sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
       const skip = (Number(page) - 1) * Number(limit);
 
       const [items, total] = await Promise.all([
         Doctor.find(filter)
-          .select("-password -googleId")
+          .select('-password -googleId')
           .sort(sort)
           .skip(skip)
           .limit(Number(limit)),
         Doctor.countDocuments(filter),
       ]);
 
-      res.ok(items, "Doctors fetched", {
+      res.ok(items, 'Doctors fetched', {
         page: Number(page),
         limit: Number(limit),
         total,
       });
     } catch (error) {
-      console.error("Doctor fetched failed", error);
-      res.serverError("Doctor fetched failed", [error.message]);
+      console.error('Doctor fetched failed', error);
+      res.serverError('Doctor fetched failed', [error.message]);
     }
   }
 );
 
 //Get the profile of doctor
-router.get("/me", authenticate, requireRole("doctor"), async (req, res) => {
-  const doc = await Doctor.findById(req.user._id).select("-password -googleId");
-  res.ok(doc, "Profile fetched");
+router.get('/me', authenticate, requireRole('doctor'), async (req, res) => {
+  const doc = await Doctor.findById(req.user._id).select('-password -googleId');
+  res.ok(doc, 'Profile fetched');
 });
 
 //update doctor profile
 router.put(
-  "/onboarding/update",
+  '/onboarding/update',
   authenticate,
-  requireRole("doctor"),
+  requireRole('doctor'),
   [
-    body("name").optional().notEmpty(),
-    body("specialization").optional().notEmpty(),
-    body("qualification").optional().notEmpty(),
-    body("category").optional().notEmpty(),
-    body("experience").optional().isInt({ min: 0 }),
-    body("about").optional().isString(),
-    body("fees").optional().isInt({ min: 0 }),
-    body("hospitalInfo").optional().isObject(),
-    body("availabilityRange.startDate").optional().isISO8601(),
-    body("availabilityRange.endDate").optional().isISO8601(),
-    body("availabilityRange.excludedWeekdays").optional().isArray(),
-    body("dailyTimeRanges").isArray({ min: 1 }),
-    body("dailyTimeRanges.*.start").isString(),
-    body("dailyTimeRanges.*.end").isString(),
-    body("slotDurationMinutes").optional().isInt({ min: 5, max: 180 }),
+    body('name').optional().notEmpty(),
+    body('specialization').optional().notEmpty(),
+    body('qualification').optional().notEmpty(),
+    body('category').optional().notEmpty(),
+    body('experience').optional().isInt({ min: 0 }),
+    body('about').optional().isString(),
+    body('fees').optional().isInt({ min: 0 }),
+    body('hospitalInfo').optional().isObject(),
+    body('availabilityRange.startDate').optional().isISO8601(),
+    body('availabilityRange.endDate').optional().isISO8601(),
+    body('availabilityRange.excludedWeekdays').optional().isArray(),
+    body('dailyTimeRanges').isArray({ min: 1 }),
+    body('dailyTimeRanges.*.start').isString(),
+    body('dailyTimeRanges.*.end').isString(),
+    body('slotDurationMinutes').optional().isInt({ min: 5, max: 180 }),
   ],
   validate,
   async (req, res) => {
@@ -124,20 +124,20 @@ router.put(
       updated.isVerified = true; //Mark profile as verified on update
       const doc = await Doctor.findByIdAndUpdate(req.user._id, updated, {
         new: true,
-      }).select("-password -googleId");
-      res.ok(doc, "Profile updated");
+      }).select('-password -googleId');
+      res.ok(doc, 'Profile updated');
     } catch (error) {
       console.log(error);
-      res.serverError("updated failed", [error.message]);
+      res.serverError('updated failed', [error.message]);
     }
   }
 );
 
 //doctor dashboard
 router.get(
-  "/dashboard",
+  '/dashboard',
   authenticate,
-  requireRole("doctor"),
+  requireRole('doctor'),
   async (req, res) => {
     try {
       const doctorId = req.auth.id;
@@ -164,47 +164,47 @@ router.get(
       );
 
       const doctor = await Doctor.findById(doctorId)
-        .select("-password -googleId")
+        .select('-password -googleId')
         .lean();
 
       if (!doctor) {
-        return res.notFound("Doctor not found");
+        return res.notFound('Doctor not found');
       }
 
       //Today's appointment with full population
       const todayAppointments = await Appointment.find({
         doctorId,
         slotStartIso: { $gte: startOfDay, $lte: endOfDay },
-        status: { $ne: "Cancelled" },
+        status: { $ne: 'Cancelled' },
       })
-        .populate("patientId", "name profileImage age email phone")
-        .populate("doctorId", "name fees profileImage specialization")
+        .populate('patientId', 'name profileImage age email phone')
+        .populate('doctorId', 'name fees profileImage specialization')
         .sort({ slotStartIso: 1 });
 
       //upcoming appointment with full population
       const upcomingAppointments = await Appointment.find({
         doctorId,
         slotStartIso: { $gt: endOfDay },
-        status: { $ne: "Cancelled" },
+        status: { $ne: 'Cancelled' },
       })
-        .populate("patientId", "name profileImage age email phone")
-        .populate("doctorId", "name fees profileImage specialization")
+        .populate('patientId', 'name profileImage age email phone')
+        .populate('doctorId', 'name fees profileImage specialization')
         .sort({ slotStartIso: 1 })
         .limit(5);
 
-      const uniquePatientIds = await Appointment.distinct("patientId", {
+      const uniquePatientIds = await Appointment.distinct('patientId', {
         doctorId,
       });
       const totalPatients = uniquePatientIds.length;
 
       const completedAppointmentCount = await Appointment.countDocuments({
         doctorId,
-        status: "Completed",
+        status: 'Completed',
       });
 
       const totalAppointment = await Appointment.find({
         doctorId,
-        status: "Completed",
+        status: 'Completed',
       });
 
       const totalRevenue = totalAppointment.reduce(
@@ -224,7 +224,7 @@ router.get(
           totalPatients,
           todayAppointments: todayAppointments.length,
           totalRevenue,
-          completedAppointments:completedAppointmentCount,
+          completedAppointments: completedAppointmentCount,
           averageRating: 4.8,
         },
         todayAppointments,
@@ -232,31 +232,31 @@ router.get(
         performance: {
           pateintSatisfaction: 4.8,
           completionRate: 98,
-          responseTime: "< 2min",
+          responseTime: '< 2min',
         },
       };
 
-      res.ok(dashboardData,'Dashboard data retrived')
+      res.ok(dashboardData, 'Dashboard data retrived');
     } catch (error) {
-      console.error("Dashboard error", error);
-      res.serverError("failed to fetch doctor dashboard", [error.message]);
+      console.error('Dashboard error', error);
+      res.serverError('failed to fetch doctor dashboard', [error.message]);
     }
   }
 );
 
-router.get("/:doctorId", validate, async (req, res) => {
+router.get('/:doctorId', validate, async (req, res) => {
   try {
     const { doctorId } = req.params;
     const doctor = await Doctor.findById(doctorId)
-      .select("-password -googleId")
+      .select('-password -googleId')
       .lean();
 
     if (!doctor) {
-      return res.notFound("Doctor not found");
+      return res.notFound('Doctor not found');
     }
-    res.ok(doctor, "doctor details fetched successfully");
+    res.ok(doctor, 'doctor details fetched successfully');
   } catch (error) {
-    res.serverError("Fetching doctor failed", [error.message]);
+    res.serverError('Fetching doctor failed', [error.message]);
   }
 });
 
