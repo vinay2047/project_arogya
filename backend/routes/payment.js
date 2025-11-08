@@ -150,14 +150,11 @@ router.post(
     body("appointmentId")
       .isMongoId()
       .withMessage("Valid appointment ID is required"),
-    body("paymentIntentId")
-      .isString()
-      .withMessage("Stripe PaymentIntent ID is required"),
   ],
   validate,
   async (req, res) => {
     try {
-      const { appointmentId, paymentIntentId } = req.body;
+      const { appointmentId } = req.body;
 
       // find appointment
       const appointment = await Appointment.findById(appointmentId)
@@ -168,20 +165,10 @@ router.post(
       if (appointment.patientId._id.toString() !== req.auth.id)
         return res.forbidden("Access denied");
 
-      // Retrieve payment intent from Stripe
-      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-
-      if (paymentIntent.status !== "succeeded")
-        return res.badRequest("Payment not completed or failed");
-
-      // Update appointment payment details if not already updated by webhook
-      if (appointment.paymentStatus !== "Paid") {
-        appointment.paymentStatus = "Paid";
-        appointment.stripePaymentStatus = "succeeded";
-        appointment.paymentMethod = "Stripe";
-        appointment.paymentDate = new Date();
-      }
-
+      // Instantly mark as paid and booked
+      appointment.paymentStatus = "Paid";
+      appointment.paymentMethod = "Manual";
+      appointment.paymentDate = new Date();
       await appointment.save();
 
       await appointment.populate(
@@ -192,7 +179,7 @@ router.post(
 
       res.ok(
         appointment,
-        "Payment verified and appointment confirmed successfully"
+        "Appointment booked and payment marked as verified (no payment processed)"
       );
     } catch (error) {
       res.serverError("Failed to verify payment", [error.message]);

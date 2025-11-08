@@ -135,7 +135,7 @@ const ConsultationStep = ({
           disabled={!symptoms.trim()}
           className="px-7 py-3 bg-teal-600 hover:bg-teal-700"
         >
-          Continue to Payment
+          Book Appointment
         </Button>
       </div>
     </div>

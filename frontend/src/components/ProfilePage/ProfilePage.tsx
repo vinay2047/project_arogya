@@ -14,7 +14,8 @@ import {
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import Header from "../landing/Header";
+import { DashboardSidebar } from "@/components/patient/DashboardSidebar";
+import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
@@ -752,82 +753,95 @@ const ProfilePage = ({ userType }: ProfileProps) => {
   };
 
   if (!user) return <div>Loading...</div>;
+  const Sidebar = userType === "doctor" ? DoctorSidebar : DashboardSidebar;
+
   return (
-    <>
-      <Header showDashboardNav={true} />
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Records</h1>
-          </div>
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar />
 
-          <div className="flex items-center space-x-8 mb-8">
-            <div className="flex flex-col items-center">
-              <Avatar className="w-24 h-24">
-                <AvatarImage src={user?.profileImage} alt={user?.name} />
-                <AvatarFallback className="bg-teal-100 text-teal-600 text-2xl font-bold">
-                  {user?.name?.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <p className="mt-2 text-lg font-semibold">{user?.name}</p>
-            </div>
-          </div>
+      <main className="flex-1 pl-0 md:pl-64">
+        <div className="p-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+            <aside className="lg:col-span-1">
+              <div className="sticky top-6">
+                <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+                  <Avatar className="w-28 h-28 mx-auto">
+                    <AvatarImage src={user?.profileImage} alt={user?.name} />
+                    <AvatarFallback className="bg-teal-100 text-teal-600 text-3xl font-bold">
+                      {user?.name?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h3 className="mt-4 text-xl font-semibold text-gray-900">
+                    {user?.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">{user?.email}</p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-1">
-              <div className="space-y-2">
-                {sidebarItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
-                      activeSection === item.id
-                        ? "bg-teal-100 text-teal-600 border border-teal-200"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                  >
-                    <item.icon className="w-5 h-5" />
-                    <span>{item.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="lg:col-span-3">
-              <Card>
-                <CardContent className="p-8">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-semibold capitalize">
-                      {
-                        sidebarItems.find((item) => item.id === activeSection)
-                          ?.label
-                      }
-                    </h2>
-                    <div className="flex space-x-2">
-                      {isEditing ? (
-                        <>
-                          <Button
-                            variant="outline"
-                            onClick={() => setIsEditing(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button onClick={handleSave} disabled={loading}>
-                            {loading ? "Saving..." : "Save"}
-                          </Button>
-                        </>
-                      ) : (
-                        <Button onClick={() => setIsEditing(true)}>Edit</Button>
-                      )}
-                    </div>
+                  <div className="mt-4 space-y-2">
+                    <Button variant="outline" className="w-full">
+                      Change Profile Photo
+                    </Button>
+                    <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white">
+                      View Appointments
+                    </Button>
                   </div>
+                </div>
+
+                <div className="mt-6 bg-white rounded-lg shadow-sm p-4">
+                  <nav className="space-y-2">
+                    {sidebarItems.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveSection(item.id)}
+                        className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                          activeSection === item.id
+                            ? "bg-teal-50 text-teal-600 border border-teal-100"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        <item.icon className="w-5 h-5" />
+                        <span className="font-medium">{item.label}</span>
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+              </div>
+            </aside>
+
+            <section className="lg:col-span-3">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl font-semibold">
+                      {sidebarItems.find((s) => s.id === activeSection)?.label}
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">Manage your information</p>
+                  </div>
+
+                  <div className="flex items-center space-x-3">
+                    {isEditing ? (
+                      <>
+                        <Button variant="outline" onClick={() => setIsEditing(false)}>
+                          Cancel
+                        </Button>
+                        <Button onClick={handleSave} disabled={loading}>
+                          {loading ? "Saving..." : "Save Changes"}
+                        </Button>
+                      </>
+                    ) : (
+                      <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-6">
                   {renderContent()}
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 

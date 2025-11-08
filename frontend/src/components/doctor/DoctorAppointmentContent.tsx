@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "../landing/Header";
+import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
 import { userAuthStore } from "@/store/authStore";
 import { Appointment, useAppointmentStore } from "@/store/appointmentStore";
 import { Card, CardContent } from "../ui/card";
@@ -273,11 +273,11 @@ const DoctorAppointmentContent = () => {
   };
 
   return (
-    <>
-      <Header showDashboardNav={true} />
+    <div className="flex h-screen bg-gray-50">
+      <DoctorSidebar />
 
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="container mx-auto px-4 py-6">
+      <main className="flex-1 pl-0 md:pl-64 p-6">
+        <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-md md:text-3xl font-bold text-gray-900">
@@ -381,8 +381,8 @@ const DoctorAppointmentContent = () => {
             </TabsContent>
           </Tabs>
         </div>
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 

@@ -6,10 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle, CreditCard, Loader2, Shield, XCircle } from "lucide-react";
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface PaymentStepInterface {
   selectedDate: Date | undefined;
@@ -37,67 +33,39 @@ const PaymentForm = ({
   setError,
   paymentStatus,
 }: any) => {
-  const stripe = useStripe();
-  const elements = useElements();
-
-  const handlePayment = async () => {
-    if (!stripe || !elements || !appointmentId) {
-      setError("Payment system not initialized");
+  const handleConfirm = async () => {
+    console.log("[PaymentForm] appointmentId:", appointmentId);
+    if (!appointmentId) {
+      setError("No appointment ID");
       return;
     }
-
     try {
       setPaymentStatus("processing");
       setError("");
-
-      // Create payment intent
-      const res = await httpService.postWithAuth("/payment/create-order", {
+      console.log("[PaymentForm] Sending POST /payment/verify-payment", { appointmentId });
+      const res = await httpService.postWithAuth("/payment/verify-payment", {
         appointmentId,
       });
-
-      if (!res.success) throw new Error(res.message);
-
-      const { clientSecret } = res.data;
-
-      const result = await stripe?.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement)!,
-          billing_details: { name: patientName },
-        },
-      });
-
-      if (result.error) {
-        console.error('Payment error:', result.error);
-        throw new Error(result.error.message);
-      } else if (result.paymentIntent?.status === "succeeded") {
-        // Verify payment on backend
-        const verifyRes = await httpService.postWithAuth("/payment/verify-payment", {
-          appointmentId,
-          paymentIntentId: result.paymentIntent.id,
-        });
-
-        if (verifyRes.success) {
-          setPaymentStatus("success");
-          onPaymentSuccess?.(verifyRes.data);
-        } else {
-          throw new Error(verifyRes.message);
-        }
+      console.log("[PaymentForm] Response from /payment/verify-payment:", res);
+      if (res.success) {
+        setPaymentStatus("success");
+        onPaymentSuccess?.(res.data);
+      } else {
+        throw new Error(res.message);
       }
     } catch (err: any) {
+      console.error("[PaymentForm] Error in confirm appointment:", err);
       setError(err.message);
       setPaymentStatus("failed");
     }
   };
-
   return (
     <div className="space-y-4">
-      <CardElement className="p-4 border rounded-md bg-white" />
       <Button
-        onClick={handlePayment}
+        onClick={handleConfirm}
         className="w-full bg-green-600 hover:bg-green-700"
-        // disabled={!stripe || !elements || !appointmentId || paymentStatus === 'processing'}
       >
-        {paymentStatus === 'processing' ? 'Processing...' : 'Pay & Confirm'}
+        {paymentStatus === 'processing' ? 'Processing...' : 'Confirm Appointment'}
       </Button>
     </div>
   );
@@ -242,27 +210,19 @@ const PayementStep = ({
         </AnimatePresence>
 
         {paymentStatus === "idle" && (
-          <Elements stripe={stripePromise}>
-            <PaymentForm
-              appointmentId={appointmentId}
-              doctorName={doctorName}
-              patientName={patientName}
-              onPaymentSuccess={onPaymentSuccess}
-              onConfirm={onConfirm}
-              setPaymentStatus={setPaymentStatus}
-              setError={setError}
-              paymentStatus={paymentStatus}
-            />
-          </Elements>
+          <PaymentForm
+            appointmentId={appointmentId}
+            doctorName={doctorName}
+            patientName={patientName}
+            onPaymentSuccess={onPaymentSuccess}
+            onConfirm={onConfirm}
+            setPaymentStatus={setPaymentStatus}
+            setError={setError}
+            paymentStatus={paymentStatus}
+          />
         )}
 
-        <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg mb-8">
-          <Shield className="w-6 h-6 text-green-600" />
-          <div>
-            <p className="font-medium text-green-800">Secure Payment</p>
-            <p>Your payment is protected by Stripe’s encrypted processing</p>
-          </div>
-        </div>
+        {/* No payment info needed */}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { convertTo24Hour, minutesToTime, toLocalYMD } from "@/lib/dateUtils";
 import { useAppointmentStore } from "@/store/appointmentStore";
 import { useDoctorStore } from "@/store/doctorStore";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ const page = () => {
   const [consultationType, setConsultationType] =
     useState("Video Consultation");
   const [symptoms, setSymptoms] = useState("");
-  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [createdAppointmentId,setCreatedAppointmentId] = useState<string | null>(null)
@@ -119,11 +119,10 @@ const page = () => {
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedSlot || !symptoms.trim()) {
-      alert("please complete all required fields");
+      alert("Please complete all required fields");
       return;
     }
 
-    setIsPaymentProcessing(true);
     try {
       const dateString = toLocalYMD(selectedDate);
       const slotStart = new Date(
@@ -133,10 +132,10 @@ const page = () => {
         slotStart.getTime() + (currentDoctor!.slotDurationMinutes || 30) * 60000
       );
       const consultationFees = getConsultationPrice();
-      const platformFees = Math.round(consultationFees * 0.1);
-      const totalAmount = consultationFees + platformFees;
+      const platformFees = 0; // No platform fees
+      const totalAmount = consultationFees;
 
-      const appointment=await bookAppointment({
+      const appointment = await bookAppointment({
         doctorId: doctorId,
         slotStartIso: slotStart.toISOString(),
         slotEndIso: slotEnd.toISOString(),
@@ -148,19 +147,16 @@ const page = () => {
         totalAmount,
       });
 
-
-      //store appointemnt Id and patinet name for paymnet 
-      if(appointment && appointment?._id) {
+      if(appointment && appointment._id) {
         setCreatedAppointmentId(appointment._id);
-        setPatientName(appointment.patientId.name || 'Patient')
-        console.log(appointment?.id);
-      }else{
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-            router.push("/patient/dashboard");
+        setPatientName(appointment.patientId.name || 'Patient');
+        setCurrentStep(3); // Move to success step
+      } else {
+        throw new Error('Failed to create appointment');
       }
     } catch (error: any) {
       console.error(error);
-      setIsPaymentProcessing(false);
+      alert('Failed to book appointment. Please try again.');
     }
   };
 
@@ -171,9 +167,7 @@ const page = () => {
   };
 
 
-  const handlePaymentSuccess = (appointment:any) => {
-                router.push("/patient/dashboard");
-  }
+  // Direct booking - no payment handling needed
 
   if (!currentDoctor) {
     return (
@@ -299,7 +293,7 @@ const page = () => {
                        symptoms={symptoms}
                        doctorFees={currentDoctor?.fees}
                        onBack={() => setCurrentStep(1)}
-                       onContinue={() => setCurrentStep(3)}
+                       onContinue={handleBooking}
                       />
                     </motion.div>
                   )}
@@ -311,21 +305,21 @@ const page = () => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                     >
-                      <PayementStep 
-                      selectedDate={selectedDate}
-                      selectedSlot={selectedSlot}
-                      consultationType={consultationType}
-                      doctorName={currentDoctor.name}
-                      slotDuration={currentDoctor.slotDurationMinutes}
-                      consultationFee={getConsultationPrice()}
-                      isProcessing={isPaymentProcessing}
-                            onBack={() => setCurrentStep(2)}
-                            onConfirm={handleBooking}
-                            onPaymentSuccess={handlePaymentSuccess}
-                            loading={loading}
-                            appointmentId={createdAppointmentId || undefined}
-                            patientName={patientName || undefined}
-                      />
+                      <div className="text-center py-12">
+                        <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-600" />
+                        <h4 className="text-lg font-semibold text-green-800 mb-2">
+                          Appointment Booked!
+                        </h4>
+                        <p className="text-gray-600 mb-4">
+                          Your appointment has been confirmed and is visible in your dashboard.
+                        </p>
+                        <Button
+                          className="mt-6 bg-green-600 hover:bg-green-700"
+                          onClick={() => router.push("/patient/dashboard")}
+                        >
+                          Go to Dashboard
+                        </Button>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

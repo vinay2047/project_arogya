@@ -171,7 +171,8 @@ router.post("/book", authenticate, requireRole("patient"), [
         consultationFees,
         platformFees,
         totalAmount,
-        paymentStatus: "Pending",
+        paymentStatus: "Paid",
+        paymentDate: new Date(),
         payoutStatus: "Pending",
       });
 
@@ -183,10 +184,10 @@ router.post("/book", authenticate, requireRole("patient"), [
       );
       await appointment.populate("patientId", "name email");
 
-      res.created(appointment, "Appointment booked successfully");
+      res.created(appointment, "Appointment booked successfully (no payment)");
     } catch (error) {
       console.error("Book appointment error", error);
-      res, serverError("Failed to book appointment", [error.message]);
+      res.serverError("Failed to book appointment", [error.message]);
     }
   },
 ]);

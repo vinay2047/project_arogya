@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Header from "../landing/Header";
+import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
 import { useSearchParams } from "next/navigation";
 import { userAuthStore } from "@/store/authStore";
 import { useDoctorStore } from "@/store/doctorStore";
@@ -116,27 +116,25 @@ const DoctorDashboardContent = () => {
 
   if (loading || !dashboardData) {
     return (
-      <>
-        <Header showDashboardNav={true} />
-        <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50 pt-16">
-          <div className="container mx-auto px-4 py-8">
-            <div className="animate-pulse space-y-8">
-              <div className="flex items-center space-x-4">
-                <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
-                <div className="space-y-2">
-                  <div className="h-8 bg-gray-300 rounded w-64"></div>
-                  <div className="h-4 bg-gray-300 rounded w-48"></div>
-                </div>
-              </div>
-              <div className="grid grid-cols-4 gap-6">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-32 bg-gray-300 rounded"></div>
-                ))}
+      <div className="flex h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50">
+        <DoctorSidebar />
+        <main className="flex-1 pl-0 md:pl-64 p-8">
+          <div className="animate-pulse space-y-8 max-w-6xl mx-auto">
+            <div className="flex items-center space-x-4">
+              <div className="w-20 h-20 bg-gray-300 rounded-full"></div>
+              <div className="space-y-2 flex-1">
+                <div className="h-8 bg-gray-300 rounded w-64"></div>
+                <div className="h-4 bg-gray-300 rounded w-48"></div>
               </div>
             </div>
+            <div className="grid grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-32 bg-gray-300 rounded"></div>
+              ))}
+            </div>
           </div>
-        </div>
-      </>
+        </main>
+      </div>
     );
   }
 
@@ -183,11 +181,11 @@ const DoctorDashboardContent = () => {
 
   console.log(dashboardData);
   return (
-    <>
-      <Header showDashboardNav={true} />
+    <div className="flex h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50">
+      <DoctorSidebar />
 
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50 pt-16">
-        <div className="container mx-auto px-4 py-8">
+      <main className="flex-1 pl-0 md:pl-64 p-8">
+        <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4 ">
@@ -467,7 +465,7 @@ const DoctorDashboardContent = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       <PrescriptionModal
         isOpen={showPrescriptionModal}
@@ -475,7 +473,7 @@ const DoctorDashboardContent = () => {
         onSave={handleSavePrescription}
         patientName={patientName}
       />
-    </>
+    </div>
   );
 };
 

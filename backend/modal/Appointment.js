@@ -51,11 +51,8 @@ payoutStatus: {
     paymentMethod: {type:String,default:'Online'},
 
 
-    // Stripe payment fields
-    stripePaymentIntentId: {type: String},
-    stripePaymentStatus: {type: String},
-    paymentDate:{type:Date},
-    lastPaymentError: {type: String}
+  // Manual payment tracking
+  paymentDate: {type: Date},
 
 
 },{timestamps:true});

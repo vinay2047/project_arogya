@@ -3,7 +3,6 @@ import { DoctorFilters } from "@/lib/types";
 import { useDoctorStore } from "@/store/doctorStore";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Header from "../landing/Header";
 import { FilterIcon, MapPin, Search, Star, X } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -60,10 +59,8 @@ const DoctorListPage = () => {
     (value) => value && value !== "experience" && value !== "desc"
   ).length;
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
-      <Header />
-
-      <div className="bg-white border-b ">
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-6">
             <div>
