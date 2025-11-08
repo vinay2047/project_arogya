@@ -65,19 +65,24 @@ export function DashboardSidebar() {
         )}
       >
         {/* App Logo */}
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-teal-600">Jivika</h1>
+        <div className="p-6 flex-row items-center space-x-2 flex border-b">
+          <div className="w-8 h-8 flex items-center justify-center">
+              <img src={
+                "/logo.png"
+              }/>
+            </div>
+          <h1 className="text-2xl font-bold text-black">Jivika</h1>
         </div>
 
         <Separator />
 
         {/* User Profile Section */}
-        <div className="p-6">
+        <div className="px-6 py-4">
           <div className="flex items-center space-x-3">
             <Avatar>
               <AvatarImage src={user?.profileImage} />
-              <AvatarFallback className="bg-teal-100 text-teal-600">
-                {user?.name?.charAt(0)}
+              <AvatarFallback className="bg-[#52b69a]/10 font-semibold text-[#52b69a]">
+                {user?.name?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
