@@ -145,6 +145,7 @@ module.exports = router;
 
 const express = require('express');
 const Patient = require('../models/Patient');
+const Patient = require('../models/Patient');
 const { authenticate, requireRole } = require('../middleware/auth');
 const { body } = require('express-validator');
 const { computeAgeFromDob } = require('../utils/date');
