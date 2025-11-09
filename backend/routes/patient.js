@@ -14,6 +14,7 @@ const { sanitizeText } = require('../services/sanitize.service');
 const { formatWithGemini } = require('../services/gemini.service');
 
 const Document = require('../models/Document'); // new model
+<<<<<<< Updated upstream
 const KnowledgeGraph = require("../models/KnowledgeGraph")
 
 const router = express.Router();
@@ -156,6 +157,8 @@ const { sanitizeText } = require('../services/sanitize.service');
 const { formatWithGemini } = require('../services/gemini.service');
 
 const Document = require('../models/Document'); // new model
+=======
+>>>>>>> Stashed changes
 const KnowledgeGraph = require('../models/KnowledgeGraph');
 
 const router = express.Router();
