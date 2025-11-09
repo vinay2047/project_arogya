@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
@@ -27,9 +27,9 @@ interface SidebarLink {
 
 const links: SidebarLink[] = [
   { name: "Appointments", href: "/patient/dashboard", icon: Calendar },
-  { name: "Prescriptions", href: "/patient/prescriptions", icon: FileText },
   { name: "Find Doctors", href: "/doctor-list", icon: Users },
   { name: "Profile", href: "/patient/profile", icon: UserCircle },
+  {name:"Medical Graph", href:"/graph/graph_1731125000_demo01", icon:FileText},
 ];
 
 export function DashboardSidebar() {
@@ -37,6 +37,23 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [graphId, setGraphId] = useState<string | null>(null);
+
+  // read graphId from localStorage so sidebar can show Graph route when available
+  useEffect(() => {
+    try {
+      const id = localStorage.getItem('graphId');
+      setGraphId(id);
+    } catch (e) {
+      setGraphId(null);
+    }
+
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'graphId') setGraphId(e.newValue);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -116,6 +133,8 @@ export function DashboardSidebar() {
               </Link>
             );
           })}
+
+         
         </nav>
 
         <Separator />
