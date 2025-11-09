@@ -1,117 +1,99 @@
-# 🏥 HealthBridge - Healthcare Management Platform
+# JIVIKA - AI-Driven Medical History Tracker and Knowledge Graph Visualizer
 
-> Built in 36 hours for [Hackathon Name] by [Your Team Name]
+Built in 36 hours at Hack36 by **Meteor Manipulator**
 
-A revolutionary healthcare management platform that bridges the gap between patients and healthcare providers. Built with cutting-edge technology to deliver a seamless healthcare experience.
+**JIVIKA** is a healthcare intelligence platform that transforms uploaded prescriptions into structured medical knowledge graphs, providing patients and doctors with deeper, connected insights into healthcare data.  
 
-## 🚀 What We Built
-
-HealthBridge is an all-in-one healthcare management solution that includes:
-
-- **Smart Appointment System** - AI-powered scheduling that suggests optimal appointment times
-- **Virtual Clinic** - Built-in video consultations with ZegoCloud
-- **Digital Health Wallet** - Secure storage for medical records and prescriptions
-- **Smart Reminders** - Automated notifications for medications and appointments
-- **Health Analytics** - Track and visualize your health metrics
-
-## 🛠️ Tech Stack
-
-| Category       | Technologies Used                          |
-|----------------|--------------------------------------------|
-| Frontend       | Next.js 15, React 19, Tailwind CSS, Radix UI |
-| Backend        | Node.js, Express, MongoDB                  |
-| Real-time      | ZegoCloud (Video), WebSockets              |
-| AI/ML          | Google Generative AI                       |
-| Payments       | Stripe Integration                        |
-| Deployment     | Vercel, MongoDB Atlas                      |
-
-## Challenges We Overcame
-
-1. **Real-time Video Integration**
-   - Implemented ZegoCloud for seamless video consultations
-   - Optimized for low-bandwidth connections
-
-2. **Data Security**
-   - End-to-end encryption for sensitive health data
-   - HIPAA-compliant data handling
-
-3. **Performance**
-   - Optimized database queries for faster response times
-   - Implemented server-side rendering for better SEO and performance
-
-## ⚡ Quick Start
-
-1. Clone the repository
-   ```bash
-   git clone <repository-url>
-   cd healthcare-management
-   ```
-
-2. Set up environment variables
-   ```bash
-   # Backend
-   cd backend
-   cp .env.example .env
-   # Fill in your credentials
-   
-   # Frontend
-   cd ../frontend
-   cp .env.example .env.local
-   # Update with your API endpoints
-   ```
-
-3. Install dependencies & run
-   ```bash
-   # In backend directory
-   npm install
-   npm run dev
-   
-   # In frontend directory (new terminal)
-   npm install
-   npm run dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) to view it in your browser
-
-## 🧩 Project Structure
-
-```
-healthcare-management/
-├── backend/               # Backend server
-│   ├── config/           # Configs & constants
-│   ├── middleware/       # Auth & request processing
-│   ├── models/           # Database schemas
-│   ├── routes/           # API endpoints
-│   └── services/         # Core business logic
-│
-└── frontend/             # Next.js frontend
-    ├── src/
-    │   ├── components/  # Reusable UI components
-    │   ├── pages/      # App routes & pages
-    │   └── lib/        # Utilities & API calls
-    └── public/         # Static assets
-```
-
-## 🚀 What's Next?
-
-- [ ] Expand telemedicine features
-- [ ] Add AI symptom checker
-- [ ] Implement health data analytics dashboard
-- [ ] Mobile app development
-- [ ] Integration with wearable devices
-
-## 👥 Team
-
-- [Team Member 1](https://github.com/) - Full Stack
-- [Team Member 2](https://github.com/) - Frontend
-- [Team Member 3](https://github.com/) - Backend
-- [Team Member 4](https://github.com/) - Design
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+It bridges the gap between fragmented medical records and meaningful, AI-driven understanding — creating a unified health ecosystem powered by data, privacy, and intelligence.
 
 ---
 
-Built with ❤️ during [Hackathon Name] 2025
+## Overview
 
+JIVIKA enables users to upload prescriptions or reports (PDFs or images), which are processed by an AI model to extract key medical entities such as diseases, medicines, dosages, and doctors’ notes.  
+This extracted data is then converted into a **knowledge graph**, allowing users to visualize relationships among their medical conditions, treatments, and healthcare providers.
+
+---
+
+## Key Features
+
+- **AI Prescription Parser**  
+  Automatically extracts entities from scanned or handwritten prescriptions using Google Generative AI.
+
+- **Healthcare Knowledge Graph**  
+  Builds an interactive medical knowledge graph linking patients, diseases, and medications.
+
+- **Digital Health Wallet**  
+  Securely stores prescriptions and medical reports in an encrypted, centralized dashboard.
+
+- **Virtual Clinic Integration**  
+  Enables video consultations through ZegoCloud with real-time communication.
+
+- **Smart Appointment System**  
+  AI-assisted scheduling based on availability, urgency, and user history.
+
+- **Data Insights Dashboard**  
+  Visualizes extracted medical data and graph relationships using modern UI components.
+
+---
+
+## How It Works
+
+1. **Document Upload**  
+   Users upload a medical prescription or report (image or PDF).
+
+2. **AI-Powered Parsing**  
+   The document is processed using Google Generative AI (Gemini) to extract structured healthcare data.
+
+3. **Entity Mapping**  
+   Extracted entities are categorized as nodes — such as Patient, Disease, Doctor, or Medicine.
+
+4. **Graph Construction**  
+   Relationships between entities are established (for example: *Patient → diagnosed_with → Disease*, *Disease → treated_with → Medicine*).
+
+5. **Visualization**  
+   The resulting graph is displayed interactively on the dashboard for user insights and history tracking.
+
+---
+
+## Tech Stack
+
+| Category | Technologies Used |
+|-----------|------------------|
+| Frontend | Next.js 15, React 19, Tailwind CSS, Radix UI |
+| Backend | Node.js, Express.js, MongoDB |
+| AI/ML | Google Generative AI (Gemini), Tensor APIs |
+| Graph Layer | MongoDB Graph Schema |
+| Real-time | ZegoCloud (Video), WebSockets |
+| Authentication | JWT, bcrypt |
+| Security | HIPAA and DPDP Act compliant encryption |
+| Payments | Stripe Integration |
+| Deployment | Vercel (Frontend), MongoDB Atlas (Backend) |
+
+---
+
+## Challenges Solved
+
+- **AI Document Parsing**  
+  Converting unstructured, handwritten medical prescriptions into structured, machine-readable data.
+
+- **Knowledge Graph Modeling**  
+  Designing a flexible schema to represent patient data and relationships effectively within MongoDB.
+
+- **Privacy and Security**  
+  Ensuring that sensitive health data remains encrypted, anonymized, and compliant with global privacy standards.
+
+- **Performance Optimization**  
+  Implementing efficient data processing pipelines and API handling to maintain real-time responsiveness.
+
+- **Real-Time Consultation**  
+  Integrating ZegoCloud for seamless video-based telemedicine functionality.
+
+---
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd jivika
