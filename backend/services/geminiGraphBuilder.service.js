@@ -11,7 +11,7 @@ const KnowledgeGraph = require('../models/KnowledgeGraph');
 // Existing function left as-is
 async function buildKnowledgeGraphFromGemini(userId, text) {
   const API_KEY = process.env.GEMINI_API_KEY;
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${API_KEY}`;
 
   const prompt = `
 You are a data structuring assistant.

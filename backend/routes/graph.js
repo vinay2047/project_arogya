@@ -8,11 +8,11 @@ const { authenticate } = require('../middleware/auth');
 const KnowledgeGraph = require('../models/KnowledgeGraph');
 const Patient = require('../models/Patient');
 
-router.post('/saveGraph', authenticate, async (req, res) => {
+router.post('/saveGraph', async (req, res) => {
   try {
-    const userId = req.user._id;
+    
     const { text, patientId } = req.body;
-
+    const userId = patientId;
     if (!text || !patientId) {
       return res.status(400).json({
         success: false,
