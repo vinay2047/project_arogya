@@ -397,96 +397,131 @@ const FileUploadDialog: FC<FileUploadDialogProps> = ({ onGraphCreated }) => {
       </Dialog>
 
             {/* Sanctioned Data Review Dialog */}
-      {showDataDialog && processedData && (
-        <Dialog open={showDataDialog} onOpenChange={setShowDataDialog}>
-          <DialogContent className="sm:max-w-[650px]">
-            <DialogHeader>
-              <DialogTitle className="flex items-center space-x-2">
-                <div className="bg-[#52b69a]/10 p-2 rounded-lg">
-                  <FileText className="w-6 h-6 text-[#52b69a]" />
-                </div>
-                <span>Review Extracted Data</span>
-              </DialogTitle>
-              <DialogDescription className="mt-4">
-                We've processed your document and extracted the following healthcare information.
-                Please review the data and decide if you'd like to contribute to our AI-driven
-                healthcare knowledge graph.
-              </DialogDescription>
-            </DialogHeader>
+    
+        {showDataDialog && processedData && (
+  <Dialog open={showDataDialog} onOpenChange={setShowDataDialog}>
+    <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto p-0 rounded-xl shadow-2xl border border-gray-200">
+      {/* Header */}
+      <DialogHeader className="px-6 pt-5 pb-3 border-b bg-gray-50">
+        <DialogTitle className="flex items-center space-x-3">
+          <div className="bg-[#52b69a]/10 p-2 rounded-lg">
+            <FileText className="w-6 h-6 text-[#52b69a]" />
+          </div>
+          <span className="text-base font-semibold text-gray-800">
+            Review Extracted Data
+          </span>
+        </DialogTitle>
+        <DialogDescription className="text-gray-600 mt-2 text-sm">
+          We processed your document and extracted key healthcare information.
+          Review it below before contributing to the knowledge graph.
+        </DialogDescription>
+      </DialogHeader>
 
-            <div className="mt-6 space-y-6">
-              <Card className="p-6 bg-gray-50/50 border-2">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-4 border-b">
-                    <div className="flex items-center space-x-3">
-                      <File className="w-5 h-5 text-gray-400" />
-                      <span className="font-medium text-gray-700">{processedData.filename}</span>
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      Document ID: {processedData.documentId}
-                    </Badge>
-                  </div>
-
-                  <div>
-                    <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                      Extracted Health Information
-                    </h4>
-                    <div className="bg-white rounded-lg p-4 border shadow-sm">
-                      {renderStructuredData(processedData.structuredData)}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                <h4 className="flex items-center text-sm font-medium text-blue-800 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                  </svg>
-                  How We Use Your Data
-                </h4>
-                {/* <ul className="text-sm text-blue-700 space-y-2">
-                  <li>• Your data will be completely anonymized</li>
-                  <li>• No personal information will be shared</li>
-                  <li>• Helps improve healthcare insights for everyone</li>
-                  <li>• You can delete your data at any time</li>
-                </ul> */}
-              </div>
+      {/* Content */}
+      <div className="px-6 py-5 bg-white space-y-5">
+        {/* Document Info */}
+        <Card className="p-5 border border-gray-200 bg-gray-50/70 shadow-sm rounded-lg">
+          <div className="flex items-center justify-between pb-3 border-b border-gray-200">
+            <div className="flex items-center space-x-2">
+              <File className="w-5 h-5 text-gray-400" />
+              <span className="font-medium text-gray-800 text-sm">
+                {processedData.filename}
+              </span>
             </div>
+            <Badge
+              variant="outline"
+              className="text-xs font-medium border-gray-300 text-gray-600"
+            >
+              Document ID: {processedData.documentId}
+            </Badge>
+          </div>
 
-            <DialogFooter className="gap-3 sm:gap-0 mt-6">
-              <Button
-                variant="outline"
-                onClick={handleDecline}
-                className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-50"
+          <div className="mt-3">
+            <h4 className="text-sm font-semibold text-gray-900 mb-2">
+              Extracted Health Information
+            </h4>
+            <div className="bg-white border border-gray-100 rounded-md p-3 text-sm text-gray-700 leading-relaxed">
+              {renderStructuredData(processedData.structuredData)}
+            </div>
+          </div>
+        </Card>
+
+        {/* Data Usage Note */}
+        <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+          <h4 className="flex items-center text-sm font-semibold text-blue-800 mb-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 mr-1.5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
+            </svg>
+            How We Use Your Data
+          </h4>
+          <p className="text-xs text-blue-700 leading-snug">
+            Your data is anonymized and used only for healthcare research and
+            improving AI insights. No personal identifiers are shared.
+          </p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <DialogFooter className="px-6 py-4 bg-gray-50 border-t flex justify-end gap-3">
+        <Button
+          variant="outline"
+          onClick={handleDecline}
+          className="gap-2 border-gray-300 text-gray-700 hover:bg-gray-100"
+        >
+          <X className="w-4 h-4" />
+          Decline
+        </Button>
+        <Button
+          onClick={handleShareData}
+          className="gap-2 bg-[#52b69a] hover:bg-[#469b85] text-white font-medium"
+          disabled={creatingGraph}
+        >
+          {creatingGraph ? (
+            <>
+              <svg
+                className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
               >
-                <X className="w-4 h-4" />
-                Decline
-              </Button>
-              <Button
-                onClick={handleShareData}
-                className="gap-2 bg-[#52b69a] hover:bg-[#52b69a]/90"
-                disabled={creatingGraph}
-              >
-                {creatingGraph ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                    </svg>
-                    Creating Graph...
-                  </>
-                ) : (
-                  <>
-                    <Check className="w-4 h-4" />
-                    Allow & Create Graph
-                  </>
-                )}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              Creating Graph...
+            </>
+          ) : (
+            <>
+              <Check className="w-4 h-4" />
+              Allow & Create Graph
+            </>
+          )}
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+
+)}
+
     </>
   );
 }

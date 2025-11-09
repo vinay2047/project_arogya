@@ -29,7 +29,7 @@ const links: SidebarLink[] = [
   { name: "Appointments", href: "/patient/dashboard", icon: Calendar },
   { name: "Find Doctors", href: "/doctor-list", icon: Users },
   { name: "Profile", href: "/patient/profile", icon: UserCircle },
-  {name:"Medical Graph", href:"/graph/graph_1731125000_demo01", icon:FileText},
+  {name:"Medical Graph", href:"/graph/graph_1731125000_demo_full", icon:FileText},
 ];
 
 export function DashboardSidebar() {
