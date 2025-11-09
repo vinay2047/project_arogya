@@ -8,6 +8,17 @@ It bridges the gap between fragmented medical records and meaningful, AI-driven 
 
 ---
 
+<p align="center">
+  <img src="/Screenshot (90).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (91).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (92).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (93).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (94).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (95).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (96).png" alt="Graph Demo" width="400">
+  <img src="/Screenshot (97).png" alt="Graph Demo" width="400">
+</p>
+
 ## Overview
 
 JIVIKA enables users to upload prescriptions or reports (PDFs or images), which are processed by an AI model to extract key medical entities such as diseases, medicines, dosages, and doctors’ notes.  
