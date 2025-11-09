@@ -14,15 +14,23 @@ const layout = ({children}:{children:React.ReactNode}) => {
 
     if(!isAuthenticated) return null;
   return (
-    <div className='min-h-screen bg-gray-50 flex flex-col'>
-        <header className='bg-white border-b px-6 py-4'>
-            <div className='max-w-4xl mx-auto'>
-                <div className='text-2xl font-bold text-shadow-blue-400'>
-                Jivika
+    <div
+        className="min-h-screen flex flex-col"
+        style={{
+            background: 'linear-gradient(180deg, rgba(82,182,154,0.12) 0%, rgba(82,182,154,0.02) 100%)',
+        }}
+    >
+        <header className="bg-white border-b px-6 py-4">
+            <div className="max-w-full flex-row mx-auto">
+                <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 flex items-center justify-center">
+                        <img src="/logo.png" alt="Jivika logo" className="w-full h-full object-contain" />
+                    </div>
+                    <div className="text-2xl font-bold">Jivika</div>
                 </div>
             </div>
         </header>
-        <main className='flex-1 flex items-center justify-center p-6'>
+        <main className="flex-1 flex items-center justify-center p-6">
             {children}
         </main>
     </div>

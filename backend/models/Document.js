@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 const mongoose = require('mongoose');
 
@@ -23,6 +24,8 @@ const documentSchema = new mongoose.Schema(
 
 =======
 <<<<<<< HEAD:backend/modal/Document.js
+=======
+>>>>>>> Stashed changes
 const mongoose = require('mongoose');
 
 const documentSchema = new mongoose.Schema(
@@ -44,6 +47,7 @@ const documentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+<<<<<<< Updated upstream
 =======
 const mongoose = require('mongoose');
 
@@ -66,4 +70,6 @@ const documentSchema = new mongoose.Schema(
 
 >>>>>>> 8485be2ae083102b8c316a38610bafe7e3f26eef:backend/models/Document.js
 >>>>>>> c0cf7391be395a19242d8248d50b997389f39594
+=======
+>>>>>>> Stashed changes
 module.exports = mongoose.model('Document', documentSchema);

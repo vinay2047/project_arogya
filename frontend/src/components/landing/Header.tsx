@@ -198,7 +198,7 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
                   Welcome,&nbsp;{user?.name}
                 </span>
                 <Link href={`/${user?.type}/dashboard`}>
-                  <Button variant="ghost" className="text-teal-800 font-medium hover:text-teal-600">
+                  <Button variant="ghost" className="text-[#1e6190] font-medium hover:text-[#52b69a] rounded-full">
                     Dashboard
                   </Button>
                 </Link>

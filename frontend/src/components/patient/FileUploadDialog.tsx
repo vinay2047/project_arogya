@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 
 "use client";
@@ -489,6 +490,8 @@ const FileUploadDialog: FC<FileUploadDialogProps> = ({ onGraphCreated }) => {
 export { FileUploadDialog };
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
 "use client";
 
 import { useState, useRef } from "react";
@@ -775,6 +778,7 @@ export function FileUploadDialog() {
     </>
   );
 }
+<<<<<<< Updated upstream
 =======
 "use client";
 
@@ -938,3 +942,5 @@ export function FileUploadDialog() {
 }
 >>>>>>> 8485be2ae083102b8c316a38610bafe7e3f26eef
 >>>>>>> c0cf7391be395a19242d8248d50b997389f39594
+=======
+>>>>>>> Stashed changes

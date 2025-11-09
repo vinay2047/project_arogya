@@ -227,7 +227,7 @@ const PatientDashboardContent = () => {
 
           {state.showBookButton && (
             <Link href="/doctor-list">
-              <Button>
+              <Button className="rounded-full bg-[#1e6190] hover:bg-[#52b69a]">
                 <Calendar className="w-4 h-4 mr-2" />
                 Book Your First Appointment
               </Button>

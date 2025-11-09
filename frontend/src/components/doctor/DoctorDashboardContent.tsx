@@ -116,7 +116,7 @@ const DoctorDashboardContent = () => {
 
   if (loading || !dashboardData) {
     return (
-      <div className="flex h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50">
+      <div className="flex h-screen bg-gradient-to-br from-[#52b69a]/10 to-white">
         <DoctorSidebar />
         <main className="flex-1 pl-0 md:pl-64 p-8">
           <div className="animate-pulse space-y-8 max-w-6xl mx-auto">
@@ -181,7 +181,7 @@ const DoctorDashboardContent = () => {
 
   console.log(dashboardData);
   return (
-    <div className="flex h-screen bg-gradient-to-br from-teal-50 via-white to-indigo-50">
+    <div className="flex h-screen bg-gradient-to-br from-[#52b69a]/10 to-white">
       <DoctorSidebar />
 
       <main className="flex-1 pl-0 md:pl-64 p-8">
@@ -189,18 +189,18 @@ const DoctorDashboardContent = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4 ">
-                <Avatar className="w-20 h-20 ring-4 ring-teal-100">
-                  <AvatarImage
+                <Avatar className="w-20 h-20 bg-[#52b69a]/20">
+                  <AvatarImage className="bg-[#52b69a]/20"
                     src={dashboardData?.user?.profileImage}
                     alt={dashboardData?.user?.name}
                   />
-                  <AvatarFallback>
+                  <AvatarFallback className="text-3xl font-bold text-[#52b69a]">
                     {dashboardData?.user?.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
 
                 <div>
-                  <h1 className="text-md md:text-3xl font-bold text-gray-900">
+                  <h1 className="text-md md:text-3xl font-bold text-black">
                     Good evening, {dashboardData?.user?.name}
                   </h1>
                   <p className="text-gray-600 text-xs md:text-lg">
@@ -215,7 +215,7 @@ const DoctorDashboardContent = () => {
                       </span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 fill-orange-400 text-yellow-400" />
+                      <Star className="w-4 h-4 fill-orange-400 " />
                       <span className="text-sm font-semibold text-gray-700">
                         {dashboardData?.stats?.averageRating}
                       </span>
@@ -226,7 +226,7 @@ const DoctorDashboardContent = () => {
 
               <div className="hidden md:flex items-center space-x-3">
                 <Link href="/doctor/profile">
-                  <Button className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
+                  <Button className="bg-[#1e6190] hover:bg-[#52b69a] h-12 rounded-full">
                     <Plus className="w-4 h-4 mr-2" />
                     Update Availability
                   </Button>
@@ -237,7 +237,7 @@ const DoctorDashboardContent = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-6 mb-8">
             {statsCards.map((stat, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+              <Card key={index} className="rounded-3xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
