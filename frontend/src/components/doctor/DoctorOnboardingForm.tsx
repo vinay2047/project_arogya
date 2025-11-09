@@ -511,6 +511,7 @@ const DoctorOnboardingForm = () => {
           <div className="flex justify-between pt-8">
             <Button
               type="button"
+              className="rounded-full"
               variant="outline"
               onClick={handlePrevious}
               disabled={currentStep === 1}
@@ -521,6 +522,7 @@ const DoctorOnboardingForm = () => {
             {currentStep < 3 ? (
               <Button
                 type="button"
+                className="rounded-full bg-[#1e6190] hover:bg-[#52b69a]"
                 onClick={handleNext}
                 disabled={currentStep === 1 && formData.categories.length === 0}
               >
@@ -531,7 +533,7 @@ const DoctorOnboardingForm = () => {
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading}
-                className="bg-green-600 hover:bg-green-700"
+                className="rounded-full bg-[#1e6190] hover:bg-[#52b69a]"
               >
                 {loading ? "Completing Setup..." : "Complete Profile"}
               </Button>

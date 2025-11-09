@@ -125,7 +125,7 @@ const PatientOnboardingForm = () => {
     <div className="w-full max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome {user?.name} to MediCare+
+          Welcome {user?.name} to Jivika
         </h1>
         <p className="text-gray-600">
           Complete your profile to start booking appointment
@@ -140,7 +140,7 @@ const PatientOnboardingForm = () => {
               <div
                 className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
                   currentStep >= step
-                    ? "bg-teal-600 border-teal-600 text-white"
+                    ? "bg-[#1e6190] text-white"
                     : "border-gray-300 text-gray-400"
                 }`}
               >
@@ -150,7 +150,7 @@ const PatientOnboardingForm = () => {
               {step < 3 && (
                 <div
                   className={`w-20 h-1 ${
-                    currentStep > step ? "bg-teal-600" : "bg-gray-300"
+                    currentStep > step ? "bg-[#1e6190]" : "bg-gray-300"
                   }`}
                 ></div>
               )}
@@ -164,7 +164,7 @@ const PatientOnboardingForm = () => {
           {currentStep === 1 && (
             <div className="space-y-6">
               <div className="flex items-center space-x-2 mb-6">
-                <User className="w-5 h-5 text-teal-600" />
+                <User className="w-5 h-5 text-[#52b69a]" />
                 <h2 className="text-xl font-semibold">Basic Information</h2>
               </div>
 
@@ -176,7 +176,7 @@ const PatientOnboardingForm = () => {
                     name="phone"
                     type="tel"
                     value={formData.phone}
-                    placeholder="+91 985467238"
+                    placeholder="+91 XXXXX XXXXX"
                     onChange={handleInputChnage}
                     required
                   />
@@ -202,7 +202,7 @@ const PatientOnboardingForm = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select gender"></SelectValue>
+                      <SelectValue placeholder="Select Gender"></SelectValue>
                     </SelectTrigger>
 
                     <SelectContent>
@@ -222,7 +222,7 @@ const PatientOnboardingForm = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select blood group"></SelectValue>
+                      <SelectValue placeholder="Select Blood Group"></SelectValue>
                     </SelectTrigger>
 
                     <SelectContent>
@@ -244,7 +244,7 @@ const PatientOnboardingForm = () => {
           {currentStep === 2 && (
             <div className="space-y-6">
               <div className="flex items-center space-x-2 mb-6">
-                <Phone className="w-5 h-5 text-teal-600" />
+                <Phone className="w-5 h-5 text-[#52b69a]" />
                 <h2 className="text-xl font-semibold">Emergency Contact</h2>
               </div>
               <Alert>
@@ -275,7 +275,7 @@ const PatientOnboardingForm = () => {
                     onChange={(e: ChangeEvent<HTMLInputElement>) => 
                         handleEmergencyContactChnage('phone',e.target.value)
                     }
-                    placeholder="+91 9919326233"
+                    placeholder="+91 XXXXX XXXXX"
                     required
                    />
                 </div>
@@ -333,9 +333,8 @@ const PatientOnboardingForm = () => {
                     rows={3}
                    />
                     </div>
-
-
-                                        <div className="space-y-2">
+                    
+                    <div className="space-y-2">
                         <Label htmlFor="currentMedications">Current Medications</Label>
                    <Textarea
                     id="currentMedications"
@@ -370,6 +369,7 @@ const PatientOnboardingForm = () => {
           <div className="flex justify-between pt-8">
             <Button
               type="button"
+              className="rounded-full"
               variant="outline"
               onClick={handlePrevious}
               disabled={currentStep === 1}
@@ -379,6 +379,7 @@ const PatientOnboardingForm = () => {
 
             {currentStep < 3 ? (
               <Button
+              className="rounded-full bg-[#1e6190] hover:bg-[#52b69a]"
                 type="button"
                 onClick={handleNext}
                 disabled={
@@ -399,7 +400,7 @@ const PatientOnboardingForm = () => {
                type="button"
                onClick={handleSubmit}
                disabled={loading}
-               className="bg-green-600 hover:bg-green-700"
+               className="bg-[#1e6190] hover:bg-[#52b69a] rounded-full"
               >
                 {loading ? "Completing Setup...": "Complete Profile"}
               </Button>

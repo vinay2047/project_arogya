@@ -48,8 +48,13 @@ export function DoctorSidebar() {
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-teal-600">Jivika</h1>
+        <div className="p-6 flex-row items-center space-x-2 flex border-b">
+          <div className="w-8 h-8 flex items-center justify-center">
+              <img src={
+                "/logo.png"
+              }/>
+            </div>
+          <h1 className="text-2xl font-bold text-black">Jivika</h1>
         </div>
 
         <Separator />
@@ -58,7 +63,7 @@ export function DoctorSidebar() {
           <div className="flex items-center space-x-3">
             <Avatar>
               <AvatarImage src={user?.profileImage} />
-              <AvatarFallback className="bg-teal-100 text-teal-600">{user?.name?.charAt(0)}</AvatarFallback>
+              <AvatarFallback className="bg-[#52b69a]/10 text-[#52b69a]">{user?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
             <div>
               <p className="font-medium">{user?.name}</p>
@@ -79,7 +84,7 @@ export function DoctorSidebar() {
                 href={link.href}
                 className={cn(
                   "flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors",
-                  isActive ? "bg-teal-50 text-teal-600" : "text-gray-600 hover:bg-gray-100"
+                  isActive ? "bg-teal-50 text-[#52b69a]" : "text-black/80 hover:bg-gray-100"
                 )}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
