@@ -193,15 +193,24 @@ export default function InteractiveMedicalGraph({
             target = nodes.find((n) => n.nodeId === edge.source);
           }
 
-          if (target && target.x && target.y) {
-            const dx = target.x - node.x;
-            const dy = target.y - node.y;
+          if (
+            target?.x != null &&
+            target?.y != null &&
+            node.x != null &&
+            node.y != null
+          ) {
+            const dx = target.x! - node.x!;
+            const dy = target.y! - node.y!;
             const dist = Math.hypot(dx, dy) + 1e-6;
             const restLength = 150 + edge.relation.length * 5;
             const displacement = dist - restLength;
             const force = attraction * displacement;
-            fx += (dx / dist) * force;
-            fy += (dy / dist) * force;
+
+            const forceX = (dx / dist) * force;
+            const forceY = (dy / dist) * force;
+
+            fx += forceX;
+            fy += forceY;
           }
         });
 
