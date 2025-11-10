@@ -1,17 +1,12 @@
-"use client";
-import {
-  Bell,
-  Calendar,
-  LogOut,
-  Settings,
-  Stethoscope,
-  User,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React from "react";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+'use client';
+import { userAuthStore } from '@/store/authStore';
+import { Bell, Calendar, LogOut, Settings, User } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,9 +14,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { userAuthStore } from "@/store/authStore";
+} from '../ui/dropdown-menu';
 
 interface HeaderProps {
   showDashboardNav?: boolean;
@@ -41,34 +34,34 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
 
   const handleLogout = () => {
     logout();
-    router.push("/");
+    router.push('/');
   };
 
   const getDashboardNavigation = (): NavigationItem[] => {
     if (!user || !showDashboardNav) return [];
 
-    if (user?.type === "patient") {
+    if (user?.type === 'patient') {
       return [
         {
-          lable: "Appointments",
+          lable: 'Appointments',
           icon: Calendar,
-          href: "/patient/dashboard",
-          active: pathname?.includes("/patient/dashboard") || false,
+          href: '/patient/dashboard',
+          active: pathname?.includes('/patient/dashboard') || false,
         },
       ];
-    } else if (user?.type === "doctor") {
+    } else if (user?.type === 'doctor') {
       return [
         {
-          lable: "Dashboard",
+          lable: 'Dashboard',
           icon: Calendar,
-          href: "/doctor/dashboard",
-          active: pathname?.includes("/doctor/dashboard") || false,
+          href: '/doctor/dashboard',
+          active: pathname?.includes('/doctor/dashboard') || false,
         },
         {
-          lable: "Appointments",
+          lable: 'Appointments',
           icon: Calendar,
-          href: "/doctor/appointments",
-          active: pathname?.includes("/doctor/appointments") || false,
+          href: '/doctor/appointments',
+          active: pathname?.includes('/doctor/appointments') || false,
         },
       ];
     }
@@ -82,9 +75,7 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 flex items-center justify-center">
-              <img src={
-                "/logo.png"
-              }/>
+              <img src={'/logo.png'} />
             </div>
 
             <div className="text-2xl font-bold text-black tracking-tight">
@@ -101,8 +92,8 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
                   href={item.href}
                   className={`flex items-center space-x-1 transition-colors ${
                     item.active
-                      ? "text-teal-600 font-semibold"
-                      : "text-gray-600 hover:text-teal-600"
+                      ? 'text-teal-600 font-semibold'
+                      : 'text-gray-600 hover:text-teal-600'
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
@@ -125,7 +116,10 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2 px-2">
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-2 px-2"
+                >
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={user?.profileImage} alt={user?.name} />
                     <AvatarFallback className="bg-teal-100 text-teal-600 text-sm font-semibold">
@@ -133,8 +127,12 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="hidden md:block text-left">
-                    <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                    <p className="text-xs text-gray-500 capitalize">{user?.type}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {user?.name}
+                    </p>
+                    <p className="text-xs text-gray-500 capitalize">
+                      {user?.type}
+                    </p>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
@@ -157,20 +155,29 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href={`/${user?.type}/profile`} className="flex items-center">
+                  <Link
+                    href={`/${user?.type}/profile`}
+                    className="flex items-center"
+                  >
                     <User className="w-4 h-4 mr-2 text-teal-600" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href={`/${user?.type}/settings`} className="flex items-center">
+                  <Link
+                    href={`/${user?.type}/settings`}
+                    className="flex items-center"
+                  >
                     <Settings className="w-4 h-4 mr-2 text-teal-600" />
                     Settings
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-red-600"
+                >
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </DropdownMenuItem>
@@ -182,7 +189,10 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
             {!isAuthenticated ? (
               <>
                 <Link href="/login/patient">
-                  <Button variant="ghost" className="text-[#1e6190] rounded-full font-medium hover:text-[#52b69a]">
+                  <Button
+                    variant="ghost"
+                    className="text-[#1e6190] rounded-full font-medium hover:text-[#52b69a]"
+                  >
                     Login
                   </Button>
                 </Link>
@@ -198,7 +208,10 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
                   Welcome,&nbsp;{user?.name}
                 </span>
                 <Link href={`/${user?.type}/dashboard`}>
-                  <Button variant="ghost" className="text-[#1e6190] font-medium hover:text-[#52b69a] rounded-full">
+                  <Button
+                    variant="ghost"
+                    className="text-[#1e6190] font-medium hover:text-[#52b69a] rounded-full"
+                  >
                     Dashboard
                   </Button>
                 </Link>

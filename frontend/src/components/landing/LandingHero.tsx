@@ -1,10 +1,9 @@
-"use client";
-import React from 'react';
-import { Button } from '../ui/button';
-import Link from 'next/link';
-import Image from 'next/image'; // Import the Next.js Image component
-import { useRouter } from 'next/navigation';
+'use client';
 import { userAuthStore } from '@/store/authStore';
+import Image from 'next/image'; // Import the Next.js Image component
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Button } from '../ui/button';
 
 const LandingHero = () => {
   const { isAuthenticated } = userAuthStore();
@@ -34,19 +33,17 @@ const LandingHero = () => {
       <div className="absolute inset-0 z-0 opacity-20">
         <div className="w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-color-teal-100),_transparent_60%)]"></div>
       </div>
-      
+
       {/* Main Content Container */}
       <div className="container mx-auto px-4 relative z-10">
-        
         {/* NEW: Two-column layout, inspired by your image */}
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          
           {/* --- LEFT COLUMN: Image --- */}
           <div className="w-full md:pl-10 lg:w-5/12">
-            {/* TODO: Add your illustration here. 
+            {/* TODO: Add your illustration here.
               Create an 'images' folder in 'public' (i.e., public/images/hero-illustration.svg)
             */}
-            <Image 
+            <Image
               src="/hero.jpg" // Replace with your image path
               alt="Arogya - Online doctor consultation"
               width={500}
@@ -58,19 +55,19 @@ const LandingHero = () => {
 
           {/* --- RIGHT COLUMN: Text Content --- */}
           <div className="w-full lg:w-7/12 text-center lg:text-left">
-            
             {/* Main Headline */}
             <h1 className="text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">
-              Empowering you to stay<br className="hidden sm:inline"/>
-              <span className="text-[#52b69a]">
-                one step ahead
-              </span>
-              <br className="hidden sm:inline"/> of your health.
+              Empowering you to stay
+              <br className="hidden sm:inline" />
+              <span className="text-[#52b69a]">one step ahead</span>
+              <br className="hidden sm:inline" /> of your health.
             </h1>
 
             {/* Subheading */}
             <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto lg:mx-0 font-light">
-              With Arogya, managing your health has never been easier. Connect with verified doctors, and schedule appointments, all through one intelligent, secure platform.
+              With Arogya, managing your health has never been easier. Connect
+              with verified doctors, and schedule appointments, all through one
+              intelligent, secure platform.
             </p>
 
             {/* Action Buttons */}
@@ -94,7 +91,6 @@ const LandingHero = () => {
               </Link>
             </div>
           </div>
-          
         </div>
       </div>
     </section>
