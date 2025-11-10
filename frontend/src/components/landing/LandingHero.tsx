@@ -48,7 +48,7 @@ const LandingHero = () => {
             */}
             <Image 
               src="/hero.jpg" // Replace with your image path
-              alt="Jivika - Online doctor consultation"
+              alt="Arogya - Online doctor consultation"
               width={500}
               height={500}
               className="w-full rounded-3xl h-auto max-w-md mx-auto lg:max-w-none"
@@ -70,7 +70,7 @@ const LandingHero = () => {
 
             {/* Subheading */}
             <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto lg:mx-0 font-light">
-              With Jivika, managing your health has never been easier. Connect with verified doctors, and schedule appointments, all through one intelligent, secure platform.
+              With Arogya, managing your health has never been easier. Connect with verified doctors, and schedule appointments, all through one intelligent, secure platform.
             </p>
 
             {/* Action Buttons */}

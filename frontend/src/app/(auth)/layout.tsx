@@ -10,7 +10,7 @@ const sliderContent = [
   {
     key: 'slide1',
     imgSrc: '/1.jpg',
-    title: 'Welcome to Jivika',
+    title: 'Welcome to Arogya',
     description: 'Your health, our priority. Connecting you with certified providers.',
   },
   {

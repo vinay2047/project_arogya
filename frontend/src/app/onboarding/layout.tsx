@@ -24,9 +24,9 @@ const layout = ({children}:{children:React.ReactNode}) => {
             <div className="max-w-full flex-row mx-auto">
                 <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 flex items-center justify-center">
-                        <img src="/logo.png" alt="Jivika logo" className="w-full h-full object-contain" />
+                        <img src="/logo.png" alt="Arogya logo" className="w-full h-full object-contain" />
                     </div>
-                    <div className="text-2xl font-bold">Jivika</div>
+                    <div className="text-2xl font-bold">Arogya</div>
                 </div>
             </div>
         </header>

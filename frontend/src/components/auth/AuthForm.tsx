@@ -20,7 +20,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const Logo = () => (
   <Link href="/" className="inline-block">
     <h1 className="text-3xl font-extrabold text-[#1e6190] tracking-tight drop-shadow-md">
-      Jivika<span className="text-[#52b69a]">+</span>
+      Arogya<span className="text-[#52b69a]">+</span>
     </h1>
   </Link>
 );

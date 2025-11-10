@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
- title: 'Jivika - AI powered healthcare system',
+ title: 'Arogya - AI powered healthcare system',
  
 };
 

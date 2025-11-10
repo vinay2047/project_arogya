@@ -103,7 +103,7 @@ export const specializations = [
   },
   {
     icon: Mail,
-    text: "support@jivika.in",
+    text: "support@arogya.in",
   },
   {
     icon: MapPin,

@@ -54,7 +54,7 @@ export function DoctorSidebar() {
                 "/logo.png"
               }/>
             </div>
-          <h1 className="text-2xl font-bold text-black">Jivika</h1>
+          <h1 className="text-2xl font-bold text-black">Arogya</h1>
         </div>
 
         <Separator />

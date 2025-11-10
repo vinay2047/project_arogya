@@ -88,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
             </div>
 
             <div className="text-2xl font-bold text-black tracking-tight">
-              Jivika
+              Arogya
             </div>
           </Link>
 

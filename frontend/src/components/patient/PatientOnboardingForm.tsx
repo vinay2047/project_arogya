@@ -125,7 +125,7 @@ const PatientOnboardingForm = () => {
     <div className="w-full max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Welcome {user?.name} to Jivika
+          Welcome {user?.name} to Arogya
         </h1>
         <p className="text-gray-600">
           Complete your profile to start booking appointment

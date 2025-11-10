@@ -161,7 +161,7 @@ router.post('/send-otp', async (req, res) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Verify your email- Jivika',
+      subject: 'Verify your email- Arogya',
       html: `<h3>Your otp is ${otp}</h3><p>It will expire in 15 minutes</p>`,
     });
 

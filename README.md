@@ -1,8 +1,8 @@
-# JIVIKA - AI-Driven Medical History Tracker and Knowledge Graph Visualizer
+# Arogya - AI-Driven Medical History Tracker and Knowledge Graph Visualizer
 
 Built in 36 hours at Hack36 by **Meteor Manipulator**
 
-**JIVIKA** is a healthcare intelligence platform that transforms uploaded prescriptions into structured medical knowledge graphs, providing patients and doctors with deeper, connected insights into healthcare data.  
+**Arogya** is a healthcare intelligence platform that transforms uploaded prescriptions into structured medical knowledge graphs, providing patients and doctors with deeper, connected insights into healthcare data.  
 
 It bridges the gap between fragmented medical records and meaningful, AI-driven understanding — creating a unified health ecosystem powered by data, privacy, and intelligence.
 
@@ -21,7 +21,7 @@ It bridges the gap between fragmented medical records and meaningful, AI-driven 
 
 ## Overview
 
-JIVIKA enables users to upload prescriptions or reports (PDFs or images), which are processed by an AI model to extract key medical entities such as diseases, medicines, dosages, and doctors’ notes.  
+Arogya enables users to upload prescriptions or reports (PDFs or images), which are processed by an AI model to extract key medical entities such as diseases, medicines, dosages, and doctors’ notes.  
 This extracted data is then converted into a **knowledge graph**, allowing users to visualize relationships among their medical conditions, treatments, and healthcare providers.
 
 ---
@@ -107,4 +107,4 @@ This extracted data is then converted into a **knowledge graph**, allowing users
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd jivika
+cd Arogya

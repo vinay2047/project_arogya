@@ -19,7 +19,7 @@ const Footer = () => {
               }/>
                 </div>
                 <div className="text-3xl font-bold text-white">
-                  Jivika
+                 Arogya
                 </div>
               </div>
 
@@ -108,7 +108,7 @@ const Footer = () => {
         <div className="py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
             <div className="text-white/80 text-sm">
-              <p>&copy; 2025 Jivika Health, Inc. All Rights Reserved.</p>
+              <p>&copy; 2025 Arogya Health, Inc. All Rights Reserved.</p>
             </div>
 
             <div className="flex items-center space-x-4">

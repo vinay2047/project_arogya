@@ -1,7 +1,7 @@
 import PatientOnboardingForm from "@/components/patient/PatientOnboardingForm";
 
 export const metadata = {
-  title: 'Complete Your Patient Profile - Jivika',
+  title: 'Complete Your Patient Profile - Arogya',
   description: 'Complete your profile to start booking appointments.',
 };
 
