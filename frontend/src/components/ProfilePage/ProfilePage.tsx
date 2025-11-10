@@ -1,47 +1,46 @@
-"use client";
-import { healthcareCategories, specializations } from "@/lib/constant";
-import { userAuthStore } from "@/store/authStore";
+'use client';
+import { DoctorSidebar } from '@/components/doctor/DoctorSidebar';
+import { DashboardSidebar } from '@/components/patient/DashboardSidebar';
+import { healthcareCategories, specializations } from '@/lib/constant';
+import { userAuthStore } from '@/store/authStore';
 import {
-  Clock,
+  Briefcase,
+  Building,
+  Calendar,
+  Droplet,
   FileText,
+  Heart,
+  Mail,
   MapPin,
+  PersonStanding,
   Phone,
   Plus,
   Stethoscope,
   User,
   X,
-  Calendar,
-  Heart,
-  Briefcase,
-  Building,
-  Mail,
-  PersonStanding,
-  Droplet,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { DashboardSidebar } from "@/components/patient/DashboardSidebar";
-import { DoctorSidebar } from "@/components/doctor/DoctorSidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Button } from "../ui/button";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Checkbox } from '../ui/checkbox';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { Badge } from "../ui/badge";
-import { Checkbox } from "../ui/checkbox";
+} from '../ui/select';
+import { Textarea } from '../ui/textarea';
 // --- NEW IMPORTS ---
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface ProfileProps {
-  userType: "doctor" | "patient";
+  userType: 'doctor' | 'patient';
 }
 
 // --- HELPER COMPONENT for displaying data in "View" mode ---
@@ -76,37 +75,37 @@ const ProfilePage = ({ userType }: ProfileProps) => {
   //   formatDateForInput ... ]
   // (All your existing logic from the original file goes here)
   const [formData, setFormData] = useState<any>({
-    name: "",
-    email: "",
-    phone: "",
-    dob: "",
-    gender: "",
-    bloodGroup: "",
-    about: "",
-    specialization: "",
+    name: '',
+    email: '',
+    phone: '',
+    dob: '',
+    gender: '',
+    bloodGroup: '',
+    about: '',
+    specialization: '',
     category: [],
-    qualification: "",
+    qualification: '',
     experience: 0,
     fees: 0,
     hospitalInfo: {
-      name: "",
-      address: "",
-      city: "",
+      name: '',
+      address: '',
+      city: '',
     },
     medicalHistory: {
-      allergies: "",
-      currentMedications: "",
-      chronicConditions: "",
+      allergies: '',
+      currentMedications: '',
+      chronicConditions: '',
     },
     emergencyContact: {
-      name: "",
-      phone: "",
-      relationship: "",
+      name: '',
+      phone: '',
+      relationship: '',
     },
 
     availabilityRange: {
-      startDate: "",
-      endDate: "",
+      startDate: '',
+      endDate: '',
       excludedWeekdays: [],
     },
     dailyTimeRanges: [],
@@ -120,36 +119,36 @@ const ProfilePage = ({ userType }: ProfileProps) => {
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        dob: user.dob || "",
-        gender: user.gender || "",
-        bloodGroup: user.bloodGroup || "",
-        about: user.about || "",
-        specialization: user.specialization || "",
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        dob: user.dob || '',
+        gender: user.gender || '',
+        bloodGroup: user.bloodGroup || '',
+        about: user.about || '',
+        specialization: user.specialization || '',
         category: user.category || [],
-        qualification: user.qualification || "",
+        qualification: user.qualification || '',
         experience: user.experience || 0,
         fees: user.fees || 0,
         hospitalInfo: {
-          name: user.hospitalInfo?.name || "",
-          address: user.hospitalInfo?.address || "",
-          city: user.hospitalInfo?.city || "",
+          name: user.hospitalInfo?.name || '',
+          address: user.hospitalInfo?.address || '',
+          city: user.hospitalInfo?.city || '',
         },
         medicalHistory: {
-          allergies: user.medicalHistory?.allergies || "",
-          currentMedications: user.medicalHistory?.currentMedications || "",
-          chronicConditions: user.medicalHistory?.chronicConditions || "",
+          allergies: user.medicalHistory?.allergies || '',
+          currentMedications: user.medicalHistory?.currentMedications || '',
+          chronicConditions: user.medicalHistory?.chronicConditions || '',
         },
         emergencyContact: {
-          name: user.emergencyContact?.name || "",
-          phone: user.emergencyContact?.phone || "",
-          relationship: user.emergencyContact?.relationship || "",
+          name: user.emergencyContact?.name || '',
+          phone: user.emergencyContact?.phone || '',
+          relationship: user.emergencyContact?.relationship || '',
         },
         availabilityRange: {
-          startDate: user.availabilityRange?.startDate || "",
-          endDate: user.availabilityRange?.endDate || "",
+          startDate: user.availabilityRange?.startDate || '',
+          endDate: user.availabilityRange?.endDate || '',
           excludedWeekdays: user.availabilityRange?.excludedWeekdays || [],
         },
         dailyTimeRanges: user.dailyTimeRanges || [],
@@ -159,8 +158,8 @@ const ProfilePage = ({ userType }: ProfileProps) => {
   }, [user]);
 
   const handleInputChnage = (field: string, value: any) => {
-    if (field.includes(".")) {
-      const [parent, child] = field.split(".");
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
       setFormData((prev: any) => ({
         ...prev,
         [parent]: {
@@ -188,7 +187,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
 
   const handleCategorySelect = (category: any): void => {
     if (!formData.category.includes(category.title)) {
-      handleInputChnage("category", [...formData.category, category.title]);
+      handleInputChnage('category', [...formData.category, category.title]);
     }
   };
 
@@ -214,7 +213,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
       ...prev,
       dailyTimeRanges: [
         ...prev.dailyTimeRanges,
-        { start: "09:00", end: "17:00" },
+        { start: '09:00', end: '17:00' },
       ],
     }));
   };
@@ -238,7 +237,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
       excludedWeekdays.push(weekday);
     }
 
-    handleInputChnage("availabilityRange.excludedWeekdays", excludedWeekdays);
+    handleInputChnage('availabilityRange.excludedWeekdays', excludedWeekdays);
   };
 
   const handleSave = async () => {
@@ -251,10 +250,10 @@ const ProfilePage = ({ userType }: ProfileProps) => {
   };
 
   const formatDateForInput = (isoDate: string): string => {
-    if (!isoDate) return "";
+    if (!isoDate) return '';
     const date = new Date(isoDate);
-    if (isNaN(date.getTime())) return "";
-    return date.toISOString().split("T")[0];
+    if (isNaN(date.getTime())) return '';
+    return date.toISOString().split('T')[0];
   };
 
   // --- RENDER FUNCTIONS (Now with View/Edit logic) ---
@@ -267,24 +266,24 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             <Label>Legal First Name</Label>
             <Input
               value={formData.name}
-              onChange={(e) => handleInputChnage("name", e.target.value)}
+              onChange={(e) => handleInputChnage('name', e.target.value)}
             />
           </div>
-          {userType === "patient" && (
+          {userType === 'patient' && (
             <>
               <div className="flex flex-col gap-2">
                 <Label>Official Date of Birth</Label>
                 <Input
                   type="date"
                   value={formatDateForInput(formData.dob)}
-                  onChange={(e) => handleInputChnage("dob", e.target.value)}
+                  onChange={(e) => handleInputChnage('dob', e.target.value)}
                 />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Gender</Label>
                 <RadioGroup
-                  value={formData.gender || ""}
-                  onValueChange={(value) => handleInputChnage("gender", value)}
+                  value={formData.gender || ''}
+                  onValueChange={(value) => handleInputChnage('gender', value)}
                   className="flex pt-2 space-x-4"
                 >
                   <div className="flex items-center space-x-2">
@@ -304,16 +303,16 @@ const ProfilePage = ({ userType }: ProfileProps) => {
               <div className="flex flex-col gap-2">
                 <Label>Blood Group</Label>
                 <Select
-                  value={formData.bloodGroup || ""}
+                  value={formData.bloodGroup || ''}
                   onValueChange={(value) =>
-                    handleInputChnage("bloodGroup", value)
+                    handleInputChnage('bloodGroup', value)
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a blood group" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                    {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(
                       (group) => (
                         <SelectItem key={group} value={group}>
                           {group}
@@ -325,12 +324,12 @@ const ProfilePage = ({ userType }: ProfileProps) => {
               </div>
             </>
           )}
-          {userType === "doctor" && (
+          {userType === 'doctor' && (
             <div className="flex flex-col gap-2 md:col-span-2">
               <Label>About</Label>
               <Textarea
-                value={formData.about || ""}
-                onChange={(e) => handleInputChnage("about", e.target.value)}
+                value={formData.about || ''}
+                onChange={(e) => handleInputChnage('about', e.target.value)}
                 rows={4}
               />
             </div>
@@ -339,18 +338,26 @@ const ProfilePage = ({ userType }: ProfileProps) => {
       ) : (
         <>
           <DisplayData label="Legal Name" value={formData.name} icon={User} />
-          {userType === "patient" && (
+          {userType === 'patient' && (
             <>
               <DisplayData
                 label="Date of Birth"
                 value={formatDateForInput(formData.dob)}
                 icon={Calendar}
               />
-              <DisplayData label="Gender" value={formData.gender} icon={PersonStanding} />
-              <DisplayData label="Blood Group" value={formData.bloodGroup} icon={Droplet} />
+              <DisplayData
+                label="Gender"
+                value={formData.gender}
+                icon={PersonStanding}
+              />
+              <DisplayData
+                label="Blood Group"
+                value={formData.bloodGroup}
+                icon={Droplet}
+              />
             </>
           )}
-          {userType === "doctor" && (
+          {userType === 'doctor' && (
             <p className="md:col-span-2 text-base text-gray-700">
               {formData.about || "No 'about' information provided."}
             </p>
@@ -367,9 +374,9 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Specialization</Label>
             <Select
-              value={formData.specialization || ""}
+              value={formData.specialization || ''}
               onValueChange={(value) =>
-                handleInputChnage("specialization", value)
+                handleInputChnage('specialization', value)
               }
             >
               <SelectTrigger>
@@ -387,9 +394,9 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Qualification</Label>
             <Input
-              value={formData.qualification || ""}
+              value={formData.qualification || ''}
               onChange={(e) =>
-                handleInputChnage("qualification", e.target.value)
+                handleInputChnage('qualification', e.target.value)
               }
             />
           </div>
@@ -397,9 +404,9 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             <Label>Experience (years)</Label>
             <Input
               type="number"
-              value={formData.experience || ""}
+              value={formData.experience || ''}
               onChange={(e) =>
-                handleInputChnage("experience", parseInt(e.target.value) || 0)
+                handleInputChnage('experience', parseInt(e.target.value) || 0)
               }
             />
           </div>
@@ -407,9 +414,9 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             <Label>Consultation Fee(₹)</Label>
             <Input
               type="number"
-              value={formData.fees || ""}
+              value={formData.fees || ''}
               onChange={(e) =>
-                handleInputChnage("fees", parseInt(e.target.value) || 0)
+                handleInputChnage('fees', parseInt(e.target.value) || 0)
               }
             />
           </div>
@@ -417,7 +424,11 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             <Label>Category</Label>
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.category?.map((cat: string, index: number) => (
-                <Badge key={index} variant="secondary" className="flex items-center">
+                <Badge
+                  key={index}
+                  variant="secondary"
+                  className="flex items-center"
+                >
                   <span>{cat}</span>
                   <button
                     type="button"
@@ -480,10 +491,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             value={`${formData.experience} years`}
             icon={Briefcase}
           />
-          <DisplayData
-            label="Consultation Fee"
-            value={`₹${formData.fees}`}
-          />
+          <DisplayData label="Consultation Fee" value={`₹${formData.fees}`} />
           <div className="md:col-span-2">
             <Label className="text-sm font-normal text-gray-500">
               Categories
@@ -512,27 +520,27 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Hospital/Clinic Name</Label>
             <Input
-              value={formData.hospitalInfo?.name || ""}
+              value={formData.hospitalInfo?.name || ''}
               onChange={(e) =>
-                handleInputChnage("hospitalInfo.name", e.target.value)
+                handleInputChnage('hospitalInfo.name', e.target.value)
               }
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label>City</Label>
             <Input
-              value={formData.hospitalInfo?.city || ""}
+              value={formData.hospitalInfo?.city || ''}
               onChange={(e) =>
-                handleInputChnage("hospitalInfo.city", e.target.value)
+                handleInputChnage('hospitalInfo.city', e.target.value)
               }
             />
           </div>
           <div className="flex flex-col gap-2 md:col-span-2">
             <Label>Address</Label>
             <Textarea
-              value={formData.hospitalInfo?.address || ""}
+              value={formData.hospitalInfo?.address || ''}
               onChange={(e) =>
-                handleInputChnage("hospitalInfo.address", e.target.value)
+                handleInputChnage('hospitalInfo.address', e.target.value)
               }
               rows={3}
             />
@@ -570,10 +578,12 @@ const ProfilePage = ({ userType }: ProfileProps) => {
               <Label>Available From Date</Label>
               <Input
                 type="date"
-                value={formatDateForInput(formData.availabilityRange?.startDate)}
+                value={formatDateForInput(
+                  formData.availabilityRange?.startDate
+                )}
                 onChange={(e) =>
                   handleInputChnage(
-                    "availabilityRange.startDate",
+                    'availabilityRange.startDate',
                     e.target.value
                   )
                 }
@@ -585,7 +595,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
                 type="date"
                 value={formatDateForInput(formData.availabilityRange?.endDate)}
                 onChange={(e) =>
-                  handleInputChnage("availabilityRange.endDate", e.target.value)
+                  handleInputChnage('availabilityRange.endDate', e.target.value)
                 }
               />
             </div>
@@ -594,8 +604,13 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             <Label>Excluded Weekdays</Label>
             <div className="flex flex-wrap gap-4 p-2">
               {[
-                "Sunday", "Monday", "Tuesday", "Wednesday",
-                "Thursday", "Friday", "Saturday",
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
               ].map((day, index) => (
                 <label key={index} className="flex items-center space-x-2">
                   <Checkbox
@@ -614,42 +629,44 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Daily Time Range</Label>
             <div className="space-y-3">
-              {formData.dailyTimeRanges?.map((timeRange: any, index: number) => (
-                <div className="flex items-center space-x-2" key={index}>
-                  <Input
-                    type="time"
-                    value={timeRange.start || ""}
-                    onChange={(e) =>
-                      handleArrayChnage(
-                        "dailyTimeRanges",
-                        index,
-                        "start",
-                        e.target.value
-                      )
-                    }
-                  />
-                  <span>to</span>
-                  <Input
-                    type="time"
-                    value={timeRange.end || ""}
-                    onChange={(e) =>
-                      handleArrayChnage(
-                        "dailyTimeRanges",
-                        index,
-                        "end",
-                        e.target.value
-                      )
-                    }
-                  />
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeTimeRange(index)}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              ))}
+              {formData.dailyTimeRanges?.map(
+                (timeRange: any, index: number) => (
+                  <div className="flex items-center space-x-2" key={index}>
+                    <Input
+                      type="time"
+                      value={timeRange.start || ''}
+                      onChange={(e) =>
+                        handleArrayChnage(
+                          'dailyTimeRanges',
+                          index,
+                          'start',
+                          e.target.value
+                        )
+                      }
+                    />
+                    <span>to</span>
+                    <Input
+                      type="time"
+                      value={timeRange.end || ''}
+                      onChange={(e) =>
+                        handleArrayChnage(
+                          'dailyTimeRanges',
+                          index,
+                          'end',
+                          e.target.value
+                        )
+                      }
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeTimeRange(index)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )
+              )}
               <Button variant="outline" size="sm" onClick={addTimeRange}>
                 <Plus className="w-4 h-4 mr-2" />
                 Add Time Range
@@ -659,16 +676,16 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Slot Duration (minutes)</Label>
             <Select
-              value={formData.slotDurationMinutes?.toString() || "30"}
+              value={formData.slotDurationMinutes?.toString() || '30'}
               onValueChange={(value) =>
-                handleInputChnage("slotDurationMinutes", parseInt(value))
+                handleInputChnage('slotDurationMinutes', parseInt(value))
               }
             >
               <SelectTrigger className="w-full md:w-1/2">
                 <SelectValue placeholder="Select slot duration" />
               </SelectTrigger>
               <SelectContent>
-                {[15, 20, 30, 45, 60, 90, 120].map(duration => (
+                {[15, 20, 30, 45, 60, 90, 120].map((duration) => (
                   <SelectItem key={duration} value={String(duration)}>
                     {duration} minutes
                   </SelectItem>
@@ -690,13 +707,19 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             />
           </div>
           <div>
-            <Label className="text-sm font-normal text-gray-500">Excluded Weekdays</Label>
+            <Label className="text-sm font-normal text-gray-500">
+              Excluded Weekdays
+            </Label>
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.availabilityRange?.excludedWeekdays?.length > 0 ? (
-                ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-                  .filter((_, index) => formData.availabilityRange.excludedWeekdays.includes(index))
+                ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                  .filter((_, index) =>
+                    formData.availabilityRange.excludedWeekdays.includes(index)
+                  )
                   .map((day) => (
-                    <Badge key={day} variant="secondary">{day}</Badge>
+                    <Badge key={day} variant="secondary">
+                      {day}
+                    </Badge>
                   ))
               ) : (
                 <p className="text-gray-400">N/A (Available 7 days/week)</p>
@@ -704,7 +727,9 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             </div>
           </div>
           <div>
-            <Label className="text-sm font-normal text-gray-500">Daily Time Ranges</Label>
+            <Label className="text-sm font-normal text-gray-500">
+              Daily Time Ranges
+            </Label>
             <div className="flex flex-col gap-2 mt-2">
               {formData.dailyTimeRanges?.length > 0 ? (
                 formData.dailyTimeRanges.map((range: any, index: number) => (
@@ -733,18 +758,22 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Phone Number</Label>
             <Input
-              value={formData.phone || ""}
-              onChange={(e) => handleInputChnage("phone", e.target.value)}
+              value={formData.phone || ''}
+              onChange={(e) => handleInputChnage('phone', e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Email</Label>
-            <Input value={formData.email || ""} disabled={true} />
+            <Input value={formData.email || ''} disabled={true} />
           </div>
         </>
       ) : (
         <>
-          <DisplayData label="Phone Number" value={formData.phone} icon={Phone} />
+          <DisplayData
+            label="Phone Number"
+            value={formData.phone}
+            icon={Phone}
+          />
           <DisplayData label="Email" value={formData.email} icon={Mail} />
         </>
       )}
@@ -758,9 +787,9 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Allergies</Label>
             <Textarea
-              value={formData.medicalHistory.allergies || ""}
+              value={formData.medicalHistory.allergies || ''}
               onChange={(e) =>
-                handleInputChnage("medicalHistory.allergies", e.target.value)
+                handleInputChnage('medicalHistory.allergies', e.target.value)
               }
               rows={3}
             />
@@ -768,10 +797,10 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Current Medications</Label>
             <Textarea
-              value={formData.medicalHistory.currentMedications || ""}
+              value={formData.medicalHistory.currentMedications || ''}
               onChange={(e) =>
                 handleInputChnage(
-                  "medicalHistory.currentMedications",
+                  'medicalHistory.currentMedications',
                   e.target.value
                 )
               }
@@ -781,10 +810,10 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Chronic Conditions</Label>
             <Textarea
-              value={formData.medicalHistory.chronicConditions || ""}
+              value={formData.medicalHistory.chronicConditions || ''}
               onChange={(e) =>
                 handleInputChnage(
-                  "medicalHistory.chronicConditions",
+                  'medicalHistory.chronicConditions',
                   e.target.value
                 )
               }
@@ -818,41 +847,38 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           <div className="flex flex-col gap-2">
             <Label>Emergency Contact Name</Label>
             <Input
-              value={formData.emergencyContact?.name || ""}
+              value={formData.emergencyContact?.name || ''}
               onChange={(e) =>
-                handleInputChnage("emergencyContact.name", e.target.value)
+                handleInputChnage('emergencyContact.name', e.target.value)
               }
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Emergency Contact Phone</Label>
             <Input
-              value={formData.emergencyContact?.phone || ""}
+              value={formData.emergencyContact?.phone || ''}
               onChange={(e) =>
-                handleInputChnage("emergencyContact.phone", e.target.value)
+                handleInputChnage('emergencyContact.phone', e.target.value)
               }
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Relationship</Label>
             <Input
-              value={formData.emergencyContact?.relationship || ""}
+              value={formData.emergencyContact?.relationship || ''}
               onChange={(e) =>
-                handleInputChnage("emergencyContact.relationship", e.target.value)
+                handleInputChnage(
+                  'emergencyContact.relationship',
+                  e.target.value
+                )
               }
             />
           </div>
         </>
       ) : (
         <>
-          <DisplayData
-            label="Name"
-            value={formData.emergencyContact?.name}
-          />
-          <DisplayData
-            label="Phone"
-            value={formData.emergencyContact?.phone}
-          />
+          <DisplayData label="Name" value={formData.emergencyContact?.name} />
+          <DisplayData label="Phone" value={formData.emergencyContact?.phone} />
           <DisplayData
             label="Relationship"
             value={formData.emergencyContact?.relationship}
@@ -864,7 +890,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
 
   if (!user) return <div>Loading...</div>; // Or a proper loading skeleton
 
-  const Sidebar = userType === "doctor" ? DoctorSidebar : DashboardSidebar;
+  const Sidebar = userType === 'doctor' ? DoctorSidebar : DashboardSidebar;
 
   const doctorTabs = (
     <TabsList className="grid w-full grid-cols-2">
@@ -894,7 +920,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
 
       <main className="flex-1 pl-0 md:pl-64 overflow-y-auto">
         <div className="p-4 md:p-8 max-w-6xl mx-auto">
-          {/* --- NEW HEADER --- */}  
+          {/* --- NEW HEADER --- */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div className="flex items-center space-x-4 mb-4 md:mb-0">
               <Avatar className="w-16 h-16">
@@ -904,9 +930,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-3xl font-bold text-black">
-                  {user?.name}
-                </h1>
+                <h1 className="text-3xl font-bold text-black">{user?.name}</h1>
                 <p className="text-black/80">{user?.email}</p>
               </div>
             </div>
@@ -923,7 +947,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
                     Cancel
                   </Button>
                   <Button onClick={handleSave} disabled={loading}>
-                    {loading ? "Saving..." : "Save Changes"}
+                    {loading ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </>
               ) : (
@@ -935,11 +959,11 @@ const ProfilePage = ({ userType }: ProfileProps) => {
           {/* --- NEW TABS --- */}
           <Tabs defaultValue="profile" className="justify-center w-full">
             <div className="flex justify-center w-full">
-              {userType === "doctor" ? doctorTabs : patientTabs}
+              {userType === 'doctor' ? doctorTabs : patientTabs}
             </div>
 
             {/* --- DOCTOR TABS --- */}
-            {userType === "doctor" && (
+            {userType === 'doctor' && (
               <>
                 <TabsContent value="profile" className="mt-6 space-y-6">
                   <Card className="rounded-3xl">
@@ -974,7 +998,7 @@ const ProfilePage = ({ userType }: ProfileProps) => {
             )}
 
             {/* --- PATIENT TABS --- */}
-            {userType === "patient" && (
+            {userType === 'patient' && (
               <>
                 <TabsContent value="profile" className="mt-6 space-y-6">
                   <Card className="rounded-3xl">
