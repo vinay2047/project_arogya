@@ -2,13 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Loader2,
-  Pause,
-  Play,
-  ZoomIn,
-  ZoomOut,
-} from 'lucide-react';
+import { Loader2, ZoomIn, ZoomOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 // ... (Interface definitions: Node, Edge, etc. - NO CHANGES) ...
@@ -49,7 +43,6 @@ interface ApiResponse {
   data: GraphData;
 }
 
-
 const WIDTH = 1000;
 const HEIGHT = 700;
 const MIN_ZOOM = 0.5;
@@ -59,9 +52,7 @@ const MAX_ZOOM = 3.0;
 const GraphLoadingSkeleton = () => (
   <div className="h-[600px] w-full flex flex-col items-center justify-center bg-slate-50 rounded-lg">
     <Loader2 className="w-12 h-12 text-teal-600 animate-spin" />
-    <p className="mt-4 text-lg text-slate-600">
-      Loading Patient Graph...
-    </p>
+    <p className="mt-4 text-lg text-slate-600">Loading Patient Graph...</p>
   </div>
 );
 
@@ -162,14 +153,13 @@ export default function InteractiveMedicalGraph({
   // --- MODIFIED: Simulation/Physics useEffect ---
   useEffect(() => {
     if (!graph) return;
-    // We create a new array to mutate, preserving the original state
+
     const nodes = graph.nodes.map((n) => ({ ...n }));
     const edges = graph.edges;
 
-    // --- MODIFIED: Tweaked forces for spring-based edges ---
-    const damping = 0.95; // Slower settling
+    const damping = 0.95;
     const repulsion = 60000;
-    const attraction = 0.05; // Spring stiffness (k)
+    const attraction = 0.05;
     const centerForce = 0.005;
 
     const step = () => {
@@ -177,26 +167,24 @@ export default function InteractiveMedicalGraph({
 
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
-        if (node === draggedNodeRef.current) continue; // Don't apply physics to dragged node
+        if (node === draggedNodeRef.current) continue;
         if (!node.x || !node.y) continue;
 
         let fx = 0,
           fy = 0;
 
-        // Repulsion force
         for (let j = 0; j < nodes.length; j++) {
           if (i === j) continue;
           const other = nodes[j];
           if (!other.x || !other.y) continue;
           const dx = node.x - other.x;
           const dy = node.y - other.y;
-          const dist2 = dx * dx + dy * dy + 0.1; // avoid division by zero
+          const dist2 = dx * dx + dy * dy + 0.1;
           const force = repulsion / dist2;
           fx += (dx / Math.sqrt(dist2)) * force;
           fy += (dy / Math.sqrt(dist2)) * force;
         }
 
-        // --- MODIFIED: Attraction force (Spring-based) ---
         edges.forEach((edge) => {
           let target: Node | undefined;
           if (edge.source === node.nodeId) {
@@ -208,33 +196,21 @@ export default function InteractiveMedicalGraph({
           if (target && target.x && target.y) {
             const dx = target.x - node.x;
             const dy = target.y - node.y;
-            const dist = Math.hypot(dx, dy) + 1e-6; // current length
-
-            const baseRestLength = 150; // Base spring length
-            const textLengthFactor = 5; // Extra length per char
-            const restLength = baseRestLength + (edge.relation.length * textLengthFactor);
-
-            // Spring force: F = k * (current_dist - rest_dist)
+            const dist = Math.hypot(dx, dy) + 1e-6;
+            const restLength = 150 + edge.relation.length * 5;
             const displacement = dist - restLength;
             const force = attraction * displacement;
-            
-            const forceX = (dx / dist) * force;
-            const forceY = (dy / dist) * force;
-
-            fx += forceX;
-            fy += forceY;
+            fx += (dx / dist) * force;
+            fy += (dy / dist) * force;
           }
         });
-        // --- END MODIFICATION ---
 
-        // Center force
         fx += (WIDTH / 2 - node.x) * centerForce;
         fy += (HEIGHT / 2 - node.y) * centerForce;
 
         node.vx = (node.vx || 0) * damping + fx;
         node.vy = (node.vy || 0) * damping + fy;
 
-        // Cap velocity to prevent explosion
         const v = Math.hypot(node.vx, node.vy);
         if (v > 50) {
           node.vx = (node.vx / v) * 50;
@@ -250,8 +226,13 @@ export default function InteractiveMedicalGraph({
     };
 
     step();
-    return () => rafRef.current && cancelAnimationFrame(rafRef.current);
-  }, [graph, paused]); // Re-run if graph changes or pause state toggles
+
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [graph, paused]);
 
   // --- MODIFIED: Draw function ---
   const draw = (
@@ -302,9 +283,16 @@ export default function InteractiveMedicalGraph({
     edges.forEach((edge) => {
       const source = nodes.find((n) => n.nodeId === edge.source);
       const target = nodes.find((n) => n.nodeId === edge.target);
-      if (!source || !target || !source.x || !source.y || !target.x || !target.y)
+      if (
+        !source ||
+        !target ||
+        !source.x ||
+        !source.y ||
+        !target.x ||
+        !target.y
+      )
         return;
-        
+
       // Draw edge line
       ctx.beginPath();
       ctx.moveTo(source.x, source.y);
@@ -312,14 +300,17 @@ export default function InteractiveMedicalGraph({
       ctx.stroke();
 
       // Draw Edge Label
-      if (view.current.scale > 0.8) { // Only draw labels if zoomed in enough
+      if (view.current.scale > 0.8) {
+        // Only draw labels if zoomed in enough
         const midX = (source.x + target.x) / 2;
         const midY = (source.y + target.y) / 2;
         const angle = Math.atan2(target.y - source.y, target.x - source.x);
-        
+
         ctx.save();
         ctx.translate(midX, midY);
-        ctx.rotate(angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle);
+        ctx.rotate(
+          angle > Math.PI / 2 || angle < -Math.PI / 2 ? angle + Math.PI : angle
+        );
         ctx.fillStyle = '#64748b'; // slate-500
         ctx.fillText(edge.relation.replace(/_/g, ' '), 0, -5);
         ctx.restore();
@@ -369,7 +360,7 @@ export default function InteractiveMedicalGraph({
 
     ctx.restore();
   };
-  
+
   // --- Zoom logic helper ---
   const updateZoom = (
     newScale: number,
@@ -387,7 +378,6 @@ export default function InteractiveMedicalGraph({
     view.current.scale = clampedScale;
     setZoomLevel(clampedScale);
   };
-
 
   // --- Event Handlers useEffect ---
   useEffect(() => {
@@ -409,7 +399,8 @@ export default function InteractiveMedicalGraph({
         if (!node.x || !node.y) continue;
         const labelText = node.label;
         const radius = Math.max(20, 10 + labelText.length * 2.5);
-        if (Math.hypot(node.x - x, node.y - y) < radius + 5) { // 5px buffer
+        if (Math.hypot(node.x - x, node.y - y) < radius + 5) {
+          // 5px buffer
           return node;
         }
       }
@@ -442,7 +433,7 @@ export default function InteractiveMedicalGraph({
         canvas.style.cursor = hoveredNodeRef.current ? 'pointer' : 'grab';
         return;
       }
-      
+
       canvas.style.cursor = draggedNodeRef.current ? 'grabbing' : 'grabbing';
 
       const dx = e.clientX - mouse.current.lastX;
@@ -461,7 +452,7 @@ export default function InteractiveMedicalGraph({
 
     const handleUp = () => {
       if (draggedNodeRef.current) {
-         // Apply a small velocity "flick"
+        // Apply a small velocity "flick"
         draggedNodeRef.current.vx = (draggedNodeRef.current.vx || 0) * 0.1;
         draggedNodeRef.current.vy = (draggedNodeRef.current.vy || 0) * 0.1;
       }
@@ -477,7 +468,7 @@ export default function InteractiveMedicalGraph({
     canvas.addEventListener('mouseleave', () => {
       hoveredNodeRef.current = null;
       if (!mouse.current.down) {
-         canvas.style.cursor = 'grab';
+        canvas.style.cursor = 'grab';
       }
     });
 
@@ -488,7 +479,7 @@ export default function InteractiveMedicalGraph({
       canvas.removeEventListener('mouseleave', () => {
         hoveredNodeRef.current = null;
         if (!mouse.current.down) {
-           canvas.style.cursor = 'grab';
+          canvas.style.cursor = 'grab';
         }
       });
     };
@@ -525,7 +516,8 @@ export default function InteractiveMedicalGraph({
           </span>
           {patient && (
             <span className="text-sm font-normal text-slate-500">
-              Patient: <b className="font-medium text-slate-700">{patient.name}</b>
+              Patient:{' '}
+              <b className="font-medium text-slate-700">{patient.name}</b>
             </span>
           )}
         </CardTitle>
@@ -553,7 +545,7 @@ export default function InteractiveMedicalGraph({
                   height={HEIGHT}
                   className="w-full h-[600px] lg:h-[700px] rounded-lg bg-slate-50"
                 />
-                
+
                 {/* --- Floating Controls --- */}
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm border border-slate-200 shadow-lg rounded-lg p-3 flex items-center space-x-3">
                   <Button
@@ -571,7 +563,9 @@ export default function InteractiveMedicalGraph({
                     step={0.01}
                     value={zoomLevel}
                     onChange={(e) =>
-                      handleZoomSliderChange([Number((e.target as HTMLInputElement).value)])
+                      handleZoomSliderChange([
+                        Number((e.target as HTMLInputElement).value),
+                      ])
                     }
                     className="w-32 h-2 bg-slate-200 rounded-lg"
                   />
@@ -585,7 +579,7 @@ export default function InteractiveMedicalGraph({
                   </Button>
                 </div>
               </div>
-              
+
               {/* --- Sidebar --- */}
               <div className="w-full lg:w-72 space-y-6">
                 <Card>
@@ -609,14 +603,18 @@ export default function InteractiveMedicalGraph({
                     <CardTitle className="text-base">Graph Info</CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm space-y-2">
-                     <div className="flex justify-between">
-                       <span className="text-slate-600">Nodes:</span>
-                       <span className="font-medium text-slate-800">{graph.nodes.length}</span>
-                     </div>
-                      <div className="flex justify-between">
-                       <span className="text-slate-600">Edges:</span>
-                       <span className="font-medium text-slate-800">{graph.edges.length}</span>
-                     </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Nodes:</span>
+                      <span className="font-medium text-slate-800">
+                        {graph.nodes.length}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Edges:</span>
+                      <span className="font-medium text-slate-800">
+                        {graph.edges.length}
+                      </span>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
