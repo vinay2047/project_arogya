@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"cd backend && npm i && npm start\" \"cd frontend && npm i && npm start\""
+    "server": "nodemon backend/server.js",
+    "client": "npm run dev --prefix frontend",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend"
   },
   "repository": {
     "type": "git",
