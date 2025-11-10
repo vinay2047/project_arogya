@@ -1,0 +1,25 @@
+{
+  "name": "project_arogya",
+  "version": "1.0.0",
+  "description": "Built in 36 hours at Hack36 by **Meteor Manipulator**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "npmi": "concurrently \"cd backend && npm i\" \"cd frontend && npm i\"",
+    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinay2047/project_arogya.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinay2047/project_arogya/issues"
+  },
+  "homepage": "https://github.com/vinay2047/project_arogya#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
