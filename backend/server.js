@@ -47,27 +47,23 @@ const nextApp = next({ dev, dir: path.join(__dirname, '../frontend') });
 const handle = nextApp.getRequestHandler();
 
 // --- Start Next.js + Express ---
-nextApp.prepare().then(() => {
-  // --- API Routes ---
-  app.use('/api/auth', require('./routes/auth'));
-  app.use('/api/doctor', require('./routes/doctor'));
-  app.use('/api/patient', require('./routes/patient'));
-  app.use('/api/appointment', require('./routes/appointment'));
-  app.use('/api/payment', require('./routes/payment'));
-  app.use('/api/graph', require('./routes/graph'));
+nextApp.prepare()
+  .then(() => {
+    // Routes...
+    app.use('/api/auth', require('./routes/auth'));
+    app.use('/api/doctor', require('./routes/doctor'));
+    app.use('/api/patient', require('./routes/patient'));
+    app.use('/api/appointment', require('./routes/appointment'));
+    app.use('/api/payment', require('./routes/payment'));
+    app.use('/api/graph', require('./routes/graph'));
 
-  // --- Health Check ---
-  app.get('/health', (req, res) =>
-    res.ok({ time: new Date().toISOString() }, 'OK')
-  );
+    app.get('/health', (req, res) => res.ok({ time: new Date().toISOString() }, 'OK'));
+    app.all('*', (req, res) => handle(req, res));
 
-  // --- Handle All Other Routes with Next.js ---
-  app.all('*', (req, res) => handle(req, res));
-
-  // --- Start Unified Server ---
-  const PORT = process.env.PORT || 8000;
-  app.listen(PORT, () =>
-    console.log(`🚀 Unified server running on port ${PORT}`)
-  );
-});
-
+    const PORT = process.env.PORT || 8000;
+    app.listen(PORT, () => console.log(`🚀 Unified server running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error('❌ Server startup failed:', err);
+    process.exit(1);
+  });
