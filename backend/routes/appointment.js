@@ -151,7 +151,7 @@ router.post('/book', authenticate, requireRole('patient'), [
     .withMessage('consultationFees is required'),
   body('platformFees').isNumeric().withMessage('platformFees is required'),
   body('totalAmount').isNumeric().withMessage('totalAmount is required'),
-  ,
+  
   validate,
 
   async (req, res) => {
