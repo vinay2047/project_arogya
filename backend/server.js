@@ -22,7 +22,32 @@ const response = require('./middleware/response');
 const app = express();
 
 // --- Security & Middleware ---
-app.use(helmet());
+
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",  // allows Next.js inline hydration scripts
+          "https://js.stripe.com", // allow Stripe scripts
+          "https://m.stripe.network",
+        ],
+        frameSrc: ["'self'", "https://js.stripe.com"], // allow Stripe iframe
+        connectSrc: [
+          "'self'",
+          "https://api.stripe.com",
+          "https://m.stripe.network",
+        ],
+        imgSrc: ["'self'", "data:", "https://*.stripe.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"], // needed for Next.js & Radix UI styles
+      },
+    },
+  })
+);
+
 app.use(morgan('dev'));
 app.use(
   cors({
