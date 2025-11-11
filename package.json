@@ -4,8 +4,9 @@
   "description": "Built for SE Project",
   "main": "backend/server.js",
   "scripts": {
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
     "start": "node backend/server.js"
+
   },
   "repository": {
     "type": "git",
