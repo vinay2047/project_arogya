@@ -1,45 +1,62 @@
-'use client'
-import AppointmentCall from '@/components/call/AppointmentCall';
+'use client';
+
 import { useAppointmentStore } from '@/store/appointmentStore';
 import { userAuthStore } from '@/store/authStore';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react'
+import dynamic from 'next/dynamic';
+import { useParams, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 
-const page = () => {
-      const params = useParams();
-      const router = useRouter();
-      const appointmentId = params.appointmentId as string; 
-      const {currentAppointment,fetchAppointmentById,joinConsultation} = useAppointmentStore();
-      const {user} = userAuthStore();
-      const [isNavigating,setIsNavigating] = useState(false);
-      useEffect(() => {
-        if(appointmentId){
-            fetchAppointmentById(appointmentId)
-        }
-      },[appointmentId,fetchAppointmentById])
+// ✅ Dynamically import AppointmentCall (no SSR)
+const AppointmentCall = dynamic(
+  () => import('@/components/call/AppointmentCall'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading call room...</p>
+        </div>
+      </div>
+    ),
+  }
+);
 
-      const handleCallEnd  = useCallback(async () => {
-        if(isNavigating) return;
-        try {
-             setIsNavigating(true);
+const Page = () => {
+  const params = useParams();
+  const router = useRouter();
+  const appointmentId = params.appointmentId as string;
+  const { currentAppointment, fetchAppointmentById, joinConsultation } =
+    useAppointmentStore();
+  const { user } = userAuthStore();
+  const [isNavigating, setIsNavigating] = useState(false);
 
-             if(user?.type === 'doctor') {
-                router.push(`/doctor/dashboard?completedCall=${appointmentId}`)
-             }else{
-                  router.push('/patient/dashboard')
-             }
-        } catch (error) {
-             console.error(error)
-             router.push('/')
-        }finally{
-            setIsNavigating(false)
-        }
-      },[user?.type, router,appointmentId,isNavigating])
+  useEffect(() => {
+    if (appointmentId) {
+      fetchAppointmentById(appointmentId);
+    }
+  }, [appointmentId, fetchAppointmentById]);
+
+  const handleCallEnd = useCallback(async () => {
+    if (isNavigating) return;
+    try {
+      setIsNavigating(true);
+      if (user?.type === 'doctor') {
+        router.push(`/doctor/dashboard?completedCall=${appointmentId}`);
+      } else {
+        router.push('/patient/dashboard');
+      }
+    } catch (error) {
+      console.error(error);
+      router.push('/');
+    } finally {
+      setIsNavigating(false);
+    }
+  }, [user?.type, router, appointmentId, isNavigating]);
 
   if (!currentAppointment || !user) {
-    return(
-      <div className="h-screen  bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+    return (
+      <div className="h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading call room...</p>
@@ -49,19 +66,19 @@ const page = () => {
   }
 
   const currentUserData = {
-    id:user.id,
-    name:user.name,
-    role:user.type as 'doctor' | 'patient' 
-  }
+    id: user.id,
+    name: user.name,
+    role: user.type as 'doctor' | 'patient',
+  };
 
   return (
     <AppointmentCall
-     appointment={currentAppointment}
-     currentUser={currentUserData}
-     onCallEnd={handleCallEnd}
-     joinConsultation={joinConsultation}
+      appointment={currentAppointment}
+      currentUser={currentUserData}
+      onCallEnd={handleCallEnd}
+      joinConsultation={joinConsultation}
     />
-  )
-}
+  );
+};
 
-export default page
+export default Page;
