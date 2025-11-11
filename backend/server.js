@@ -1,4 +1,8 @@
 // --- Core Imports ---
+if(process.env.NODE_ENV!=="production"){
+    require('dotenv').config()
+}
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
@@ -8,7 +12,7 @@ const bodyParser = require('body-parser');
 const passportLib = require('passport');
 const path = require('path');
 const next = require('next');
-require('dotenv').config();
+
 
 // --- Local Imports ---
 require('./config/passport');
@@ -66,3 +70,4 @@ nextApp.prepare().then(() => {
     console.log(`🚀 Unified server running on port ${PORT}`)
   );
 });
+
