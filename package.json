@@ -1,14 +1,11 @@
 {
   "name": "project_arogya",
   "version": "1.0.0",
-  "description": "Built in 36 hours at Hack36 by **Meteor Manipulator**",
-  "main": "index.js",
+  "description": "Built for SE Project",
+  "main": "backend/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon backend/server.js",
-    "client": "npm run dev --prefix frontend",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/server.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +19,15 @@
   },
   "homepage": "https://github.com/vinay2047/project_arogya#readme",
   "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.5.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.3",
+    "passport": "^0.7.0",
+    "dotenv": "^16.4.5",
+    "next": "^15.5.2",
     "concurrently": "^9.2.1"
   }
 }
